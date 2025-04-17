@@ -20,7 +20,7 @@ template.innerHTML = /* html */ `
       <label for="repetition">Repetition Seperator</label>
       <input name="repetition"></input>
     </div>
-    <ul class="segment-list"></ul>
+    <ul id="segment-list"></ul>
   </div
 `;
 
