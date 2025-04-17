@@ -11,9 +11,10 @@
     "noUncheckedSideEffectImports": true,
     "allowJs": true,
     "checkJs": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "outFile": "./index.d.ts",
+    "noEmit": true,
+    // "declaration": true,
+    // "emitDeclarationOnly": true,
+    // "outFile": "./index.d.ts",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -28,5 +29,8 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "skipLibCheck": true
-  }
+  },
+  "exclude": [
+    "index.d.ts"
+  ]
 }
