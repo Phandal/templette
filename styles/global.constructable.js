@@ -1,14 +1,11 @@
 const style = new CSSStyleSheet();
 
 const css = /* css */ `
-  footer {
-    font-size: x-small;
-    display: flex;
-    justify-content: center;
+  :host * {
+    box-sizing: border-box;
   }
 `;
 
 style.replaceSync(css);
 
 export default style;
-
