@@ -1,0 +1,14 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+}
+
+:root {
+  --clr-black: #212529;
+  --clr-white: #E9ECEF;
+  --clr-grey: #F8F9FA;
+  --clr-button: #6C757D;
+}

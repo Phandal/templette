@@ -1,8 +1,8 @@
-import template from './header.template.js';
-import localStyle from './header.constructable.js';
+import template from './logo.template.js';
+import localStyle from './logo.constructable.js';
 import globalStyle from '../../styles/global.constructable.js';
 
-class TempletteHeader extends HTMLElement {
+export class TempletteLogo extends HTMLElement {
   constructor() {
     super();
 
@@ -14,6 +14,6 @@ class TempletteHeader extends HTMLElement {
   }
 }
 
-window.customElements.define('templette-header', TempletteHeader);
+window.customElements.define('templette-logo', TempletteLogo);
 
-export default TempletteHeader;
+export default TempletteLogo;
