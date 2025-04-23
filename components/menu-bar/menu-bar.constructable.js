@@ -6,6 +6,7 @@ sheet.replaceSync(/* css */ `
     justify-content: flex-end;
     gap: 10px;
     background-color: var(--clr-black);
+    padding: var(--header-padding);
   }
 
   div button {
@@ -13,6 +14,7 @@ sheet.replaceSync(/* css */ `
     color: var(--clr-white);
     border-radius: 4px;
     border-style: none;
+    padding: 5px;
   }
 `);
 

@@ -11,4 +11,12 @@
   --clr-white: #E9ECEF;
   --clr-grey: #F8F9FA;
   --clr-button: #6C757D;
+  --header-padding: 5px;
+}
+
+body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-content: space-between;
+  min-height: 100vh;
 }

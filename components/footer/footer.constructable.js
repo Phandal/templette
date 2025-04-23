@@ -11,4 +11,3 @@ const css = /* css */ `
 style.replaceSync(css);
 
 export default style;
-
