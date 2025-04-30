@@ -24,6 +24,7 @@ class TempletteSegment extends HTMLElement {
     this.removeButton = node.querySelector('button.remove');
 
     this.removeSegment = this.removeSegment.bind(this);
+    this.editSegment = this.editSegment.bind(this);
 
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.append(node);
@@ -37,12 +38,21 @@ class TempletteSegment extends HTMLElement {
     this.remove();
   }
 
+  editSegment() {
+    console.log('editing this segment');
+    this.dispatchEvent(
+      new CustomEvent('edit-segment', { detail: { id: this.segmentId } }),
+    );
+  }
+
   addListeners() {
     this.removeButton?.addEventListener('click', this.removeSegment);
+    this.editButton?.addEventListener('click', this.editSegment);
   }
 
   removeListeners() {
     this.removeButton?.removeEventListener('click', this.removeSegment);
+    this.editButton?.removeEventListener('click', this.editSegment);
   }
 
   connectedCallback() {

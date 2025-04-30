@@ -6,3 +6,7 @@ type CreateSegment = {
   id: string;
   name: string;
 };
+
+type EditSegment = {
+  id: string;
+};
