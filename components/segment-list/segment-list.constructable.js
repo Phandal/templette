@@ -1,11 +1,15 @@
 const style = new CSSStyleSheet();
 
 style.replaceSync(/* css */ `
+  :host {
+    display: flex;
+    flex-direction: column;
+  }
+
   .overflow-list {
     overflow-y: scroll;
     border: 1px solid var(--clr-black);
-    height: 100vh;
-    /* TODO fix the height */
+    flex-grow: 1;
   }
 `);
 
