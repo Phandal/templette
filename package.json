@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -w src/server -x tsx src/server/main.ts",
-    "start": "NODE_ENV=production tsx src/server/main.ts",
+    "dev": "nodemon -w src/server -x tsx server/main.ts",
+    "start": "NODE_ENV=production tsx server/main.ts",
     "build": "vite build",
     "check": "biome check",
     "check:fix": "biome check --write"
@@ -15,9 +15,18 @@
   "description": "",
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "http-server": "^14.1.1"
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.15.3",
+    "nodemon": "^3.1.10",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.4"
   },
   "dependencies": {
-    "monaco-editor": "^0.52.2"
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "monaco-editor": "^0.52.2",
+    "vite-express": "^0.21.1"
   }
 }
