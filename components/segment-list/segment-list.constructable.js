@@ -2,14 +2,18 @@ const style = new CSSStyleSheet();
 
 style.replaceSync(/* css */ `
   :host {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
   }
 
   .overflow-list {
-    overflow-y: scroll;
+    overflow-y: auto;
     border: 1px solid var(--clr-black);
-    flex-grow: 1;
   }
 `);
 

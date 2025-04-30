@@ -5,9 +5,27 @@ class TempletteBuilderEditor extends HTMLElement {
     super();
 
     const node = document.importNode(template.content, true);
-    const shadow = this.attachShadow({ mode: 'open' });
 
+    this.editorDiv = node.querySelector('div.editor');
+
+    const shadow = this.attachShadow({ mode: 'open' });
     shadow.append(node);
+  }
+
+  connectedCallback() {
+    // this.editor = monaco.editor.create(this.editorDiv, {
+    //   language: 'json',
+    //   wordBasedSuggestions: 'currentDocument',
+    //   automaticLayout: true,
+    //   readOnly: false,
+    //   theme: 'vs-dark',
+    //   minimap: {
+    //     enabled: false,
+    //   },
+    //   stickyScroll: {
+    //     enabled: false,
+    //   },
+    // });
   }
 }
 

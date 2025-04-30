@@ -1,5 +1,7 @@
 import TempletteElement from '../element/element.component.js';
 import template from './segment.template.js';
+import globalStyles from '../../styles/global.constructable.js';
+import localStyles from './segment.constructable.js';
 
 class TempletteSegment extends HTMLElement {
   /** @type {string} */
@@ -8,7 +10,8 @@ class TempletteSegment extends HTMLElement {
   segmentName = '';
   elementCount;
   childrenCount;
-  // childSegments = [];
+  editButton;
+  removeButton;
 
   /** @type {TempletteElement[]} */
   elements = [];
@@ -27,6 +30,7 @@ class TempletteSegment extends HTMLElement {
     this.editSegment = this.editSegment.bind(this);
 
     const shadow = this.attachShadow({ mode: 'open' });
+    shadow.adoptedStyleSheets = [globalStyles, localStyles];
     shadow.append(node);
   }
 
