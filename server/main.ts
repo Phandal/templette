@@ -10,5 +10,5 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 ViteExpress.listen(app, PORT, () => {
-  console.log(`Server is listening on port localhost:${PORT}...`);
+  console.log(`Server is listening on port http://localhost:${PORT} ...`);
 });
