@@ -1,15 +1,11 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
+    "typeRoots": ["./types", "./node_modules/@types"],
     "useDefineForClassFields": true,
     "module": "NodeNext",
-    "lib": [
-      "ESNext",
-      "DOM"
-    ],
+    "lib": ["ESNext", "DOM"],
+    "baseUrl": "./",
     "moduleResolution": "NodeNext",
     "strict": true,
     "resolveJsonModule": true,
@@ -21,7 +17,5 @@
     "noImplicitReturns": true,
     "skipLibCheck": true
   },
-  "include": [
-    "server"
-  ]
+  "include": ["./components/**/*", "./server/**/*", "./types/**/*", "./index.ts"]
 }

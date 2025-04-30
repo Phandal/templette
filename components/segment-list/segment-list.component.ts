@@ -1,8 +1,8 @@
-import globalStyle from '../../styles/global.constructable.ts';
-import TempletteSegment from '../segment/segment.component.ts';
-import type TempletteSideCard from '../sidecard/sidecard.component.ts';
-import localStyle from './segment-list.constructable.ts';
-import template from './segment-list.template.ts';
+import globalStyle from '../../styles/global.constructable.js';
+import TempletteSegment from '../segment/segment.component.js';
+import type TempletteSideCard from '../sidecard/sidecard.component.js';
+import localStyle from './segment-list.constructable.js';
+import template from './segment-list.template.js';
 
 class TempletteSegmentList extends HTMLElement {
   public shadow: ShadowRoot;
