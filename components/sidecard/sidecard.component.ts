@@ -1,10 +1,10 @@
-import template from './sidecard.template.js';
 import globalStyle from '../../styles/global.constructable.js';
 import localStyle from './sidecard.constructable.js';
+import template from './sidecard.template.js';
 
 class TempletteSideCard extends HTMLElement {
-  shadow;
-  closeButton;
+  private shadow: ShadowRoot;
+  public closeButton: HTMLButtonElement;
 
   constructor() {
     super();
@@ -12,7 +12,7 @@ class TempletteSideCard extends HTMLElement {
     const node = document.importNode(template.content, true);
     this.shadow = this.attachShadow({ mode: 'open' });
 
-    this.closeButton = node.querySelector('button.close');
+    this.closeButton = <HTMLButtonElement>node.querySelector('button.close');
 
     this.close = this.close.bind(this);
 

@@ -1,6 +1,6 @@
-import template from './header.template.js';
-import localStyle from './header.constructable.js';
 import globalStyle from '../../styles/global.constructable.js';
+import localStyle from './header.constructable.js';
+import template from './header.template.js';
 
 class TempletteHeader extends HTMLElement {
   constructor() {

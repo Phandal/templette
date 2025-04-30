@@ -1,13 +1,11 @@
-import template from './input.template.js';
-import localStyle from './input.constructable.js';
 import globalStyle from '../../styles/global.constructable.js';
+import localStyle from './input.constructable.js';
+import template from './input.template.js';
 
 class TempletteInput extends HTMLElement {
-  /** @type {HTMLLabelElement} */
-  #labelNode;
+  private labelNode: HTMLLabelElement;
 
-  /** @type {HTMLInputElement} */
-  #inputNode;
+  private inputNode: HTMLInputElement;
 
   static observedAttributes = ['name'];
 
@@ -17,27 +15,19 @@ class TempletteInput extends HTMLElement {
     const node = document.importNode(template.content, true);
     const shadow = this.attachShadow({ mode: 'open' });
 
-    const labelNode = node.querySelector('label');
-    const inputNode = node.querySelector('input');
-    if (!labelNode || !inputNode) {
-      throw new Error('missing expected attribute');
-    }
-
-    this.#labelNode = labelNode;
-    this.#inputNode = inputNode;
+    this.labelNode = <HTMLLabelElement>node.querySelector('label');
+    this.inputNode = <HTMLInputElement>node.querySelector('input');
 
     shadow.append(node);
 
     shadow.adoptedStyleSheets = [globalStyle, localStyle];
   }
 
-  /**
-   * The callback used when an attribute changes
-   * @param {string} attr
-   * @param {string} _
-   * @param {string} newVal
-   */
-  attributeChangedCallback(attr, _, newVal) {
+  public attributeChangedCallback(
+    attr: string,
+    _: string,
+    newVal: string,
+  ): void {
     // console.log('attr | new | old:', `${attr} | ${oldVal} | ${newVal}`);
     switch (attr) {
       case 'name':
@@ -46,16 +36,12 @@ class TempletteInput extends HTMLElement {
     }
   }
 
-  /**
-   * The function called to update the state
-   * @param {string} value
-   */
-  update(value) {
-    this.#labelNode.setAttribute('for', value);
-    this.#labelNode.textContent = value;
+  update(value: string): void {
+    this.labelNode.setAttribute('for', value);
+    this.labelNode.textContent = value;
 
-    this.#inputNode.setAttribute('id', value);
-    this.#inputNode.setAttribute('name', value);
+    this.inputNode.setAttribute('id', value);
+    this.inputNode.setAttribute('name', value);
   }
 }
 

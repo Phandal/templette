@@ -1,30 +1,31 @@
-import TempletteElement from '../element/element.component.js';
-import template from './segment.template.js';
 import globalStyles from '../../styles/global.constructable.js';
+import type TempletteElement from '../element/element.component.js';
 import localStyles from './segment.constructable.js';
+import template from './segment.template.js';
 
 class TempletteSegment extends HTMLElement {
-  /** @type {string} */
-  segmentId = '';
-  /** @type {string} */
-  segmentName = '';
-  elementCount;
-  childrenCount;
-  editButton;
-  removeButton;
+  public segmentId = '';
+  public segmentName = '';
+  public elementCount: HTMLParagraphElement;
+  public childrenCount: HTMLParagraphElement;
+  public editButton: HTMLButtonElement;
+  public removeButton: HTMLButtonElement;
 
-  /** @type {TempletteElement[]} */
-  elements = [];
+  public elements: TempletteElement[] = [];
 
   constructor() {
     super();
 
     const node = document.importNode(template.content, true);
 
-    this.elementCount = node.querySelector('p.element-count');
-    this.childrenCount = node.querySelector('p.children-count');
-    this.editButton = node.querySelector('button.edit');
-    this.removeButton = node.querySelector('button.remove');
+    this.elementCount = <HTMLParagraphElement>(
+      node.querySelector('p.element-count')
+    );
+    this.childrenCount = <HTMLParagraphElement>(
+      node.querySelector('p.children-count')
+    );
+    this.editButton = <HTMLButtonElement>node.querySelector('button.edit');
+    this.removeButton = <HTMLButtonElement>node.querySelector('button.remove');
 
     this.removeSegment = this.removeSegment.bind(this);
     this.editSegment = this.editSegment.bind(this);

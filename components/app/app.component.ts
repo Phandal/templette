@@ -1,6 +1,6 @@
-import template from './app.template.js';
-import localStyle from './app.constructable.js';
 import globalStyle from '../../styles/global.constructable.js';
+import localStyle from './app.constructable.js';
+import template from './app.template.js';
 
 class TempletteApp extends HTMLElement {
   constructor() {

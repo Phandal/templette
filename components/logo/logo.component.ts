@@ -1,6 +1,6 @@
-import template from './logo.template.js';
-import localStyle from './logo.constructable.js';
 import globalStyle from '../../styles/global.constructable.js';
+import localStyle from './logo.constructable.js';
+import template from './logo.template.js';
 
 export class TempletteLogo extends HTMLElement {
   constructor() {

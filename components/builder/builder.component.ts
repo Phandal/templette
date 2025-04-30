@@ -1,6 +1,6 @@
-import template from './builder.template.js';
 import globalStyle from '../../styles/global.constructable.js';
 import localStyle from './builder.constructable.js';
+import template from './builder.template.js';
 
 class TempletteBuilder extends HTMLElement {
   constructor() {

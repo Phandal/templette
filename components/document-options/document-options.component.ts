@@ -1,6 +1,6 @@
-import template from './document-options.template.js';
-import localStyle from './document-options.constructable.js';
 import globalStyle from '../../styles/global.constructable.js';
+import localStyle from './document-options.constructable.js';
+import template from './document-options.template.js';
 
 class TempletteDocumentOptions extends HTMLElement {
   constructor() {
@@ -14,6 +14,9 @@ class TempletteDocumentOptions extends HTMLElement {
   }
 }
 
-window.customElements.define('templette-document-options', TempletteDocumentOptions);
+window.customElements.define(
+  'templette-document-options',
+  TempletteDocumentOptions,
+);
 
 export default TempletteDocumentOptions;

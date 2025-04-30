@@ -1,25 +1,27 @@
-import TempletteSegment from '../segment/segment.component.js';
-import template from './segment-list.template.js';
-import globalStyle from '../../styles/global.constructable.js';
-import localStyle from './segment-list.constructable.js';
+import globalStyle from '../../styles/global.constructable.ts';
+import TempletteSegment from '../segment/segment.component.ts';
+import type TempletteSideCard from '../sidecard/sidecard.component.ts';
+import localStyle from './segment-list.constructable.ts';
+import template from './segment-list.template.ts';
 
 class TempletteSegmentList extends HTMLElement {
-  shadow;
-  sideCard;
-  list;
-  addButton;
+  public shadow: ShadowRoot;
+  public sideCard: TempletteSideCard;
+  public list: HTMLUListElement;
+  public addButton: HTMLButtonElement;
 
-  /** @type {TempletteSegment[]} */
-  #segments = [];
+  private segments: TempletteSegment[] = [];
 
   constructor() {
     super();
 
     const node = document.importNode(template.content, true);
 
-    this.addButton = node.querySelector('button.segment-list-add');
-    this.sideCard = node.querySelector('templette-sidecard');
-    this.list = node.querySelector('ul');
+    this.addButton = <HTMLButtonElement>(
+      node.querySelector('button.segment-list-add')
+    );
+    this.sideCard = <TempletteSideCard>node.querySelector('templette-sidecard');
+    this.list = <HTMLUListElement>node.querySelector('ul');
 
     this.addSegment = this.addSegment.bind(this);
     this.removeSegment = this.removeSegment.bind(this);
@@ -30,12 +32,8 @@ class TempletteSegmentList extends HTMLElement {
     this.shadow.append(node);
   }
 
-  /**
-   * Adds a segment to the list of segments manages by this component
-   * @param {Event} ev
-   */
-  addSegment(ev) {
-    const { detail: options } = /** @type {CustomEvent<CreateSegment>} */ (ev);
+  addSegment(ev: Event) {
+    const { detail: options } = <CustomEvent<CreateSegment>>ev;
 
     const segmentComponent = new TempletteSegment();
     segmentComponent.setAttribute('segment-id', options.id);
@@ -44,33 +42,24 @@ class TempletteSegmentList extends HTMLElement {
     segmentComponent.addEventListener('remove-segment', this.removeSegment);
     segmentComponent.addEventListener('edit-segment', this.editSegment);
 
-    this.#segments.push(segmentComponent);
+    this.segments.push(segmentComponent);
     this.list?.appendChild(segmentComponent);
   }
 
-  /**
-   * Removes a segment from the list of segments managed by this component
-   * @param {Event} ev
-   */
-  removeSegment(ev) {
-    const customEvent = /** @type {CustomEvent<RemoveSegment>} */ (ev);
+  removeSegment(ev: Event) {
+    const customEvent = <CustomEvent<RemoveSegment>>ev;
     console.log('removing segment with id', customEvent.detail.id);
 
-    this.#segments = this.#segments.filter((segment) => {
+    this.segments = this.segments.filter((segment) => {
       return segment.segmentId !== customEvent.detail.id;
     });
   }
 
-  /**
-   * Shows the sidecard with the segment to be edited
-   * @param {Event} ev
-   */
-  editSegment(ev) {
-    const customEvent = /** @type {CustomEvent<EditSegment>} */ (ev);
+  editSegment(ev: Event) {
+    const customEvent = <CustomEvent<EditSegment>>ev;
     console.log('editing segment with id', customEvent.detail.id);
 
     this.sideCard?.classList.add('open');
-    // this.sideCard?.setAttribute('state', 'open');
   }
 
   addListeners() {
