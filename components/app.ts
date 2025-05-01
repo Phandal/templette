@@ -13,9 +13,7 @@ const localStyle = new CSSStyleSheet();
 localStyle.replaceSync(/* css */ `
   :host {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    /* height: 100%; */
-    /* width: 100%; */
+    grid-template-columns: 4fr 3fr;
     gap: 10px;
   }
 `);
