@@ -1,21 +1,36 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "typeRoots": ["./types", "./node_modules/@types"],
-    "useDefineForClassFields": true,
-    "module": "NodeNext",
-    "lib": ["ESNext", "DOM"],
-    "baseUrl": "./",
-    "moduleResolution": "NodeNext",
-    "strict": true,
-    "resolveJsonModule": true,
+    "target": "ES2020",
+    "useDefineForClassFields": false,
+    "module": "ESNext",
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true,
+    /* Bunder mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "isolatedModules": true,
-    "esModuleInterop": true,
+    "moduleDetection": "force",
     "noEmit": true,
+    "strict": true,
     "noUnusedLocals": true,
+    "resolveJsonModule": true,
     "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
     "noImplicitReturns": true,
-    "skipLibCheck": true
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ]
   },
-  "include": ["./components/**/*", "./server/**/*", "./types/**/*", "./index.ts"]
+  "include": [
+    "./components/**/*",
+    "./server/**/*",
+    "./types/**/*",
+    "./index.ts"
+  ]
 }

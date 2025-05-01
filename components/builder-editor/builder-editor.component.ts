@@ -19,6 +19,10 @@ class TempletteBuilderEditor extends HTMLElement {
     shadow.append(node);
   }
 
+  public getContents(): string {
+    return this.editor?.getValue() ?? '';
+  }
+
   public connectedCallback() {
     this.editor = monaco.editor.create(this.editorDiv, {
       language: 'json',
