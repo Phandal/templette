@@ -17,26 +17,26 @@ window.MonacoEnvironment = {
 monaco.languages.json.jsonDefaults.diagnosticsOptions.enableSchemaRequest = true;
 
 // Header
-import './components/logo/logo.component.js';
-import './components/menu-bar/menu-bar.component.js';
-import './components/header/header.component.js';
+import './components/logo.js';
+import './components/menu-bar.js';
+import './components/header.js';
 
 // SideCard
-import './components/sidecard/sidecard.component.js';
+import './components/sidecard.js';
 
 // Builder
-import './components/input/input.component.js';
-import './components/document-options/document-options.component.js';
-import './components/element/element.component.js';
-import './components/segment/segment.component.js';
-import './components/segment-list/segment-list.component.js';
-import './components/builder/builder.component.js';
+import './components/input.js';
+import './components/document-options.js';
+import './components/element.js';
+import './components/segment.js';
+import './components/segment-list.js';
+import './components/builder.js';
 
 // BuilderEditor
-import './components/builder-editor/builder-editor.component.js';
+import './components/builder-editor.js';
 
 // App
-import './components/app/app.component.js';
+import './components/app.js';
 
 // Footer
-import './components/footer/footer.component.js';
+import './components/footer.js';

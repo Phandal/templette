@@ -1,7 +1,44 @@
-import globalStyles from '../../styles/global.constructable.js';
-import type TempletteElement from '../element/element.component.js';
-import localStyles from './segment.constructable.js';
-import template from './segment.template.js';
+import globalStyle from '../styles/global.constructable.js';
+import type TempletteElement from './element.js';
+
+// Template
+const template = document.createElement('template');
+template.id = 'templette-segment-template';
+template.innerHTML = /* html */ `
+<li class="segment-content">
+  <div>
+  <p>Segment_Name</p>
+    <div class="segment-counts">
+      <p class="element-count"># Elements</p>
+      <p class="children-count"># Children</p>
+    </div>
+    <div class="segment-actions">
+      <button class="edit">Edit</button>
+      <button class="remove">Remove</button>
+    </div>
+  </div>
+</li>
+`;
+
+// Style
+const localStyle = new CSSStyleSheet();
+localStyle.replaceSync(/* css */ `
+  li {
+    list-style: none;
+    border: 1px solid var(--clr-black);
+  }
+
+  li > div {
+    display: grid;
+    grid-template-columns: 4fr 1fr 1fr;
+  }
+
+  div.segment-counts, div.segment-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+`);
 
 class TempletteSegment extends HTMLElement {
   public segmentId = '';
@@ -31,7 +68,7 @@ class TempletteSegment extends HTMLElement {
     this.editSegment = this.editSegment.bind(this);
 
     const shadow = this.attachShadow({ mode: 'open' });
-    shadow.adoptedStyleSheets = [globalStyles, localStyles];
+    shadow.adoptedStyleSheets = [globalStyle, localStyle];
     shadow.append(node);
   }
 

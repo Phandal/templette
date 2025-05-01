@@ -1,7 +1,18 @@
-import template from './builder-editor.template.js';
-import globalStyle from '../../styles/global.constructable.js';
-import localStyle from './builder-editor.constructable.js';
+import globalStyle from '../styles/global.constructable.js';
 // import * as monaco from 'monaco-editor';
+
+// Template
+const template = document.createElement('template');
+template.id = 'templette-builder-editor-template';
+template.innerHTML = /* html */ `
+  <div class="editor"></div>
+`;
+
+// Style
+const localStyle = new CSSStyleSheet();
+
+localStyle.replaceSync(/* css */ `
+`);
 
 class TempletteBuilderEditor extends HTMLElement {
   public editorDiv: HTMLDivElement;

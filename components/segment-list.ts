@@ -1,8 +1,39 @@
-import globalStyle from '../../styles/global.constructable.js';
-import TempletteSegment from '../segment/segment.component.js';
-import type TempletteSideCard from '../sidecard/sidecard.component.js';
-import localStyle from './segment-list.constructable.js';
-import template from './segment-list.template.js';
+import globalStyle from '../styles/global.constructable.js';
+import TempletteSegment from './segment.js';
+import type TempletteSideCard from './sidecard.js';
+
+// Template
+const template = document.createElement('template');
+template.id = 'templette-segment-list-template';
+template.innerHTML = /* html */ `
+  <div class="segment-operations">
+    <button class="segment-list-add">Add Segment</button>
+  </div>
+  <div class="overflow-list">
+    <ul class="templette-segment-list"></ul>
+  </div>
+  <templette-sidecard state="closed"></templette-sidecard>
+`;
+
+// Style
+const localStyle = new CSSStyleSheet();
+
+localStyle.replaceSync(/* css */ `
+  :host {
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  .overflow-list {
+    overflow-y: auto;
+    border: 1px solid var(--clr-black);
+  }
+`);
 
 class TempletteSegmentList extends HTMLElement {
   public shadow: ShadowRoot;

@@ -1,6 +1,22 @@
-import globalStyle from '../../styles/global.constructable.js';
-import localStyle from './input.constructable.js';
-import template from './input.template.js';
+import globalStyle from '../styles/global.constructable.js';
+
+// Template
+const template = document.createElement('template');
+template.id = 'templette-input-template';
+template.innerHTML = /* html */ `
+  <label for></label>
+  <input type="text" id name />
+`;
+
+
+// Style
+const localStyle = new CSSStyleSheet();
+localStyle.replaceSync(/* css */ `
+  :host {
+    display: grid;
+    gap: 2px;
+  }
+`);
 
 class TempletteInput extends HTMLElement {
   private labelNode: HTMLLabelElement;
