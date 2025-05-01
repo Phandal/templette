@@ -18,16 +18,17 @@ localStyle.replaceSync(/* css */ `
   :host {
     display: grid;
     grid-template-rows: auto 1fr;
-  }
-
-  ul {
-    padding: 0;
-    margin: 0;
+    height: 50%;
+    background-color: red;
   }
 
   ul.templette-segment-list {
+    padding: 0;
+    margin: 0;
+    height: 50%;
     overflow-y: auto;
     border: 1px solid var(--clr-black);
+    background-color: blue;
   }
 `);
 

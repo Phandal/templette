@@ -17,6 +17,6 @@
 body {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  align-content: space-between;
+  /* align-content: space-between; */
   height: 100vh;
 }
