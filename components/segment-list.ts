@@ -6,13 +6,9 @@ import type TempletteSideCard from './sidecard.js';
 const template = document.createElement('template');
 template.id = 'templette-segment-list-template';
 template.innerHTML = /* html */ `
-  <div class="segment-operations">
-    <button class="segment-list-add">Add Segment</button>
-  </div>
-  <div class="overflow-list">
-    <ul class="templette-segment-list"></ul>
-  </div>
-  <templette-sidecard state="closed"></templette-sidecard>
+  <button class="segment-list-add">Add Segment</button>
+  <ul class="templette-segment-list"></ul>
+  <templette-sidecard></templette-sidecard>
 `;
 
 // Style
@@ -29,7 +25,7 @@ localStyle.replaceSync(/* css */ `
     margin: 0;
   }
 
-  .overflow-list {
+  ul.templette-segment-list {
     overflow-y: auto;
     border: 1px solid var(--clr-black);
   }

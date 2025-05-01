@@ -1,10 +1,12 @@
 import globalStyle from '../styles/global.constructable.js';
-// import * as monaco from 'monaco-editor';
+import * as monaco from 'monaco-editor';
+import monacoEditorCSS from 'monaco-editor/min/vs/editor/editor.main.css?inline';
 
 // Template
 const template = document.createElement('template');
 template.id = 'templette-builder-editor-template';
 template.innerHTML = /* html */ `
+  <style>${monacoEditorCSS}</style>
   <div class="editor"></div>
 `;
 
@@ -12,10 +14,18 @@ template.innerHTML = /* html */ `
 const localStyle = new CSSStyleSheet();
 
 localStyle.replaceSync(/* css */ `
+  :host {
+    display: inline-block;
+  }
+
+  div.editor {
+    height: 100%;
+    width: 100%;
+  }
 `);
 
 class TempletteBuilderEditor extends HTMLElement {
-  public editorDiv: HTMLDivElement;
+  public _editor: HTMLDivElement;
   // private editor: monaco.editor.IStandaloneCodeEditor | undefined = undefined;
 
   constructor() {
@@ -23,7 +33,7 @@ class TempletteBuilderEditor extends HTMLElement {
 
     const node = document.importNode(template.content, true);
 
-    this.editorDiv = <HTMLDivElement>node.querySelector('div.editor');
+    this._editor = <HTMLDivElement>node.querySelector('div.editor');
 
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.adoptedStyleSheets = [globalStyle, localStyle];
@@ -35,19 +45,20 @@ class TempletteBuilderEditor extends HTMLElement {
   // }
 
   public connectedCallback() {
-    // this.editor = monaco.editor.create(this.editorDiv, {
-    //   language: 'json',
-    //   wordBasedSuggestions: 'currentDocument',
-    //   automaticLayout: true,
-    //   readOnly: false,
-    //   theme: 'vs-dark',
-    //   minimap: {
-    //     enabled: false,
-    //   },
-    //   stickyScroll: {
-    //     enabled: false,
-    //   },
-    // });
+    monaco.editor.create(this._editor, {
+      language: 'javascript',
+      value: `console.log('hello world')`,
+      wordBasedSuggestions: 'currentDocument',
+      automaticLayout: true,
+      readOnly: false,
+      theme: 'vs-dark',
+      minimap: {
+        enabled: false,
+      },
+      stickyScroll: {
+        enabled: false,
+      },
+    });
   }
 }
 

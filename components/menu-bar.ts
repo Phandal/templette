@@ -4,31 +4,21 @@ import global from '../styles/global.constructable.js';
 const template = document.createElement('template');
 template.id = 'templette-menu-bar-template';
 template.innerHTML = /* html */ `
-  <div>
-    <button class="templette-save">Save</button>
-    <button class="templette-load">Load</button>
-    <button class="templette-clear">Clear</button>
-    <button class="templette-process">Serialize</button>
-  </div>
+  <button class="templette-save">Save</button>
+  <button class="templette-load">Load</button>
+  <button class="templette-clear">Clear</button>
+  <button class="templette-process">Serialize</button>
 `;
 
 // Style
 const localStyle = new CSSStyleSheet();
 localStyle.replaceSync(/* css */ `
-  div {
+  :host {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
     background-color: var(--clr-black);
     padding: var(--header-padding);
-  }
-
-  div button {
-    background-color: var(--clr-button);
-    color: var(--clr-white);
-    border-radius: 4px;
-    border-style: none;
-    padding: 5px;
   }
 `);
 

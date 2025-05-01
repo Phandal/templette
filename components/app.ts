@@ -4,20 +4,18 @@ import globalStyle from '../styles/global.constructable.js';
 const template = document.createElement('template');
 template.id = 'templette-app-template';
 template.innerHTML = /* html */ `
-  <section class="app">
-    <templette-builder></templette-builder>
-    <templette-builder-editor></templette-builder-editor>
-  </section>
+  <templette-builder></templette-builder>
+  <templette-builder-editor></templette-builder-editor>
 `;
 
 // Styles
 const localStyle = new CSSStyleSheet();
 localStyle.replaceSync(/* css */ `
-  section {
+  :host {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    height: 100%;
-    width: 100%;
+    /* height: 100%; */
+    /* width: 100%; */
     gap: 10px;
   }
 `);
