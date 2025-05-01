@@ -17,7 +17,6 @@ localStyle.replaceSync(/* css */ `
     display: grid;
     height: 100%;
     grid-template-rows: auto 1fr;
-    /* background: yellow; */
   }
 `);
 

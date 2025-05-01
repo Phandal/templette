@@ -7,7 +7,9 @@ const template = document.createElement('template');
 template.id = 'templette-segment-list-template';
 template.innerHTML = /* html */ `
   <button class="segment-list-add">Add Segment</button>
-  <ul class="templette-segment-list"></ul>
+  <div class="overflow-list">
+    <ul class="templette-segment-list"></ul>
+  </div>
   <templette-sidecard></templette-sidecard>
 `;
 
@@ -19,17 +21,24 @@ localStyle.replaceSync(/* css */ `
     display: grid;
     grid-template-rows: auto 1fr;
     height: 100%;
-    /* background-color: red; */
-    overflow: hidden;
+  }
+
+  div.overflow-list {
+    position: relative;
+    border: 1px solid var(--clr-black);
+    height: 100%;
+    min-height: 0;
   }
 
   ul.templette-segment-list {
     padding: 0;
     margin: 0;
-    height: 100%;
     overflow-y: auto;
-    border: 1px solid var(--clr-black);
-    /* background-color: blue; */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
   }
 `);
 
