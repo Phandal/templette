@@ -12,15 +12,14 @@
   --clr-white: #f8f9fa;
   --clr-button: #6c757d;
   --header-padding: 5px;
+  --border-radius: 4px;
 }
 
 
 body {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  /* align-content: space-between; */
   gap: 10px;
   height: 100vh;
   background-color: var(--clr-white);
-  /* height: calc(100vh - 10px); */
 }

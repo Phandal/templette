@@ -16,9 +16,9 @@ window.MonacoEnvironment = {
 // @ts-expect-error
 monaco.languages.json.jsonDefaults.diagnosticsOptions.enableSchemaRequest = true;
 
-window.onbeforeunload = (e: Event) => {
-  e.preventDefault();
-};
+// window.onbeforeunload = (e: Event) => {
+//   e.preventDefault();
+// };
 
 // Header
 import './components/logo.js';

@@ -17,7 +17,7 @@ localStyle.replaceSync(/* css */ `
   }
 
   input {
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     border-style: none;
   }
 `);

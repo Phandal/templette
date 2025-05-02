@@ -22,6 +22,7 @@ localStyle.replaceSync(/* css */ `
     justify-items: center;
     background-color: var(--clr-grey);
     padding: 10px 0px;
+    border-radius: var(--border-radius);
   }
 `);
 

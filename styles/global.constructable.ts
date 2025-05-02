@@ -8,7 +8,7 @@ style.replaceSync(/* css */ `
   :host button {
     background-color: var(--clr-button);
     color: var(--clr-white);
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     border-style: none;
     padding: 5px;
   }

@@ -16,11 +16,13 @@ localStyle.replaceSync(/* css */ `
     position: absolute;
     top: 0;
     bottom: 0;
-    left: -300px;
-    transition: left 0.2s linear;
+    left: -100%;
+    width: 100%;
+    transition: all 0.2s linear;
     z-index: 10;
     background: var(--clr-white);
     box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+    border-radius: var(--border-radius);
   }
 
   :host(.open) {

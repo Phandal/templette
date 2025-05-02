@@ -21,12 +21,12 @@ localStyle.replaceSync(/* css */ `
     display: grid;
     grid-template-rows: auto 1fr;
     height: 100%;
-    background-color: var(--clr-black)
+    background-color: var(--clr-black);
+    border-radius: var(--border-radius);
   }
 
   div.overflow-list {
     position: relative;
-    border: 1px solid var(--clr-black);
     height: 100%;
     min-height: 0;
   }
