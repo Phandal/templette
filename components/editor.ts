@@ -1,6 +1,8 @@
-import globalStyle from '../styles/global.constructable.js';
 import * as monaco from 'monaco-editor';
 import monacoEditorCSS from 'monaco-editor/min/vs/editor/editor.main.css?inline';
+import globalStyle from '../styles/global.constructable.js';
+
+type Language = 'json' | '';
 
 // Template
 const template = document.createElement('template');
@@ -12,21 +14,15 @@ template.innerHTML = /* html */ `
 
 // Style
 const localStyle = new CSSStyleSheet();
-
 localStyle.replaceSync(/* css */ `
-  :host {
-    display: inline-block;
-  }
-
   div.editor {
     height: 100%;
-    width: 100%;
   }
 `);
 
-class TempletteBuilderEditor extends HTMLElement {
-  public _editor: HTMLDivElement;
-  // private editor: monaco.editor.IStandaloneCodeEditor | undefined = undefined;
+class TempletteEditor extends HTMLElement {
+  private _editor: HTMLDivElement;
+  private editor: monaco.editor.IStandaloneCodeEditor | undefined;
 
   constructor() {
     super();
@@ -34,20 +30,17 @@ class TempletteBuilderEditor extends HTMLElement {
     const node = document.importNode(template.content, true);
 
     this._editor = <HTMLDivElement>node.querySelector('div.editor');
+    this.editor = undefined;
 
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.adoptedStyleSheets = [globalStyle, localStyle];
     shadow.append(node);
   }
 
-  // public getContents(): string {
-  //   return this.editor?.getValue() ?? '';
-  // }
-
-  public connectedCallback() {
-    monaco.editor.create(this._editor, {
-      language: 'javascript',
-      value: `console.log('hello world')`,
+  private createEditor(lang: Language): monaco.editor.IStandaloneCodeEditor {
+    return monaco.editor.create(this._editor, {
+      language: lang,
+      value: lang,
       wordBasedSuggestions: 'currentDocument',
       automaticLayout: true,
       readOnly: false,
@@ -60,11 +53,22 @@ class TempletteBuilderEditor extends HTMLElement {
       },
     });
   }
+
+  public getLanguage(): string {
+    return this.editor?.getModel()?.getLanguageId() ?? '';
+  }
+
+  public connectedCallback() {
+    const langAttr = this.getAttribute('language');
+    this.editor = this.createEditor(isLanguage(langAttr) ? langAttr : '');
+  }
 }
 
-window.customElements.define(
-  'templette-builder-editor',
-  TempletteBuilderEditor,
-);
+function isLanguage(lang: string | null): lang is Language {
+  const lowerLang = lang?.toLowerCase();
+  return lowerLang === 'json' || lowerLang === '';
+}
 
-export default TempletteBuilderEditor;
+window.customElements.define('templette-editor', TempletteEditor);
+
+export default TempletteEditor;

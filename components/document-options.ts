@@ -19,7 +19,9 @@ localStyle.replaceSync(/* css */ `
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
+    justify-items: center;
     background-color: var(--clr-grey);
+    padding: 10px 0px;
   }
 `);
 

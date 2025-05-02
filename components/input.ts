@@ -8,13 +8,17 @@ template.innerHTML = /* html */ `
   <input type="text" id name />
 `;
 
-
 // Style
 const localStyle = new CSSStyleSheet();
 localStyle.replaceSync(/* css */ `
   :host {
     display: grid;
     gap: 2px;
+  }
+
+  input {
+    border-radius: 4px;
+    border-style: none;
   }
 `);
 

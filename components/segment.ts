@@ -26,6 +26,7 @@ localStyle.replaceSync(/* css */ `
     border: 1px solid var(--clr-black);
     display: grid;
     grid-template-columns: 4fr 1fr 1fr;
+    background-color: var(--clr-grey);
   }
 
   div.segment-counts, div.segment-actions {

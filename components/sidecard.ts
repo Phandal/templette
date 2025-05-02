@@ -19,7 +19,7 @@ localStyle.replaceSync(/* css */ `
     left: -300px;
     transition: left 0.2s linear;
     z-index: 10;
-    background: var(--clr-grey);
+    background: var(--clr-white);
     box-shadow: 2px 0 5px rgba(0,0,0,0.2);
   }
 

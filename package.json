@@ -7,9 +7,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "check": "biome check",
-    "check:fix": "biome check --write",
-    "dev-old": "nodemon -w server -x tsx server/main.ts",
-    "start-old": "NODE_ENV=production tsx server/main.ts"
+    "check:fix": "biome check --write"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

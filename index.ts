@@ -16,6 +16,10 @@ window.MonacoEnvironment = {
 // @ts-expect-error
 monaco.languages.json.jsonDefaults.diagnosticsOptions.enableSchemaRequest = true;
 
+window.onbeforeunload = (e: Event) => {
+  e.preventDefault();
+};
+
 // Header
 import './components/logo.js';
 import './components/menu-bar.js';
@@ -32,8 +36,9 @@ import './components/segment.js';
 import './components/segment-list.js';
 import './components/builder.js';
 
-// BuilderEditor
-import './components/builder-editor.js';
+// IO
+import './components/editor.js';
+import './components/io.js';
 
 // App
 import './components/app.js';

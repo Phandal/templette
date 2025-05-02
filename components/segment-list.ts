@@ -21,6 +21,7 @@ localStyle.replaceSync(/* css */ `
     display: grid;
     grid-template-rows: auto 1fr;
     height: 100%;
+    background-color: var(--clr-black)
   }
 
   div.overflow-list {

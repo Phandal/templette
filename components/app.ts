@@ -5,7 +5,7 @@ const template = document.createElement('template');
 template.id = 'templette-app-template';
 template.innerHTML = /* html */ `
   <templette-builder></templette-builder>
-  <templette-builder-editor></templette-builder-editor>
+  <templette-io></templette-io>
 `;
 
 // Styles
@@ -14,7 +14,10 @@ localStyle.replaceSync(/* css */ `
   :host {
     display: grid;
     grid-template-columns: 4fr 3fr;
-    gap: 10px;
+  }
+
+  :host > * {
+    padding: 0px 10px;
   }
 `);
 
