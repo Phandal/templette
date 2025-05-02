@@ -6,14 +6,8 @@ import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  base: '/templette',
   plugins: [cssInjectedByJsPlugin],
-  // build: {
-  //   rollupOptions: {
-  //     input: {
-  //       main: resolve(__dirname, 'index.html'),
-  //     },
-  //   },
-  // },
   optimizeDeps: {
     include: ['monaco-editor'],
   },
