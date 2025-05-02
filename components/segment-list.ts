@@ -1,4 +1,4 @@
-import globalStyle from '../styles/global.constructable.js';
+import globalStyle from '../styles/global.js';
 import TempletteSegment from './segment.js';
 import type TempletteSideCard from './sidecard.js';
 

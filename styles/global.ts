@@ -12,6 +12,10 @@ style.replaceSync(/* css */ `
     border-style: none;
     padding: 5px;
   }
+
+  :host button:hover {
+    color: var(--clr-black);
+  }
 `);
 
 export default style;

@@ -1,4 +1,4 @@
-import globalStyle from '../styles/global.constructable.js';
+import globalStyle from '../styles/global.js';
 
 // Template
 const template = document.createElement('template');

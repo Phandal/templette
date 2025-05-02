@@ -1,4 +1,4 @@
-import globalStyle from '../styles/global.constructable.js';
+import globalStyle from '../styles/global.js';
 import type TempletteElement from './element.js';
 
 // Template

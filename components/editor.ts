@@ -1,6 +1,6 @@
 import * as monaco from 'monaco-editor';
 import monacoEditorCSS from 'monaco-editor/min/vs/editor/editor.main.css?inline';
-import globalStyle from '../styles/global.constructable.js';
+import globalStyle from '../styles/global.js';
 
 type Language = 'json' | '';
 
