@@ -18,7 +18,7 @@ localStyle.replaceSync(/* css */ `
     bottom: 0;
     left: -100%;
     width: 100%;
-    transition: all 0.2s linear;
+    transition: left 0.2s ease-in-out;
     z-index: 10;
     background: var(--clr-white);
     box-shadow: 2px 0 5px rgba(0,0,0,0.2);
