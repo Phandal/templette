@@ -23,11 +23,32 @@ localStyle.replaceSync(/* css */ `
 `);
 
 class TempletteMenuBar extends HTMLElement {
+  public saveButton: HTMLButtonElement;
+  public loadButton: HTMLButtonElement;
+  public clearButton: HTMLButtonElement;
+  public serializeButton: HTMLButtonElement;
+
   constructor() {
     super();
 
     const node = document.importNode(template.content, true);
     const shadow = this.attachShadow({ mode: 'open' });
+
+    this.saveButton = <HTMLButtonElement>(
+      node.querySelector('button.templette-save')
+    );
+
+    this.loadButton = <HTMLButtonElement>(
+      node.querySelector('button.templette-load')
+    );
+
+    this.clearButton = <HTMLButtonElement>(
+      node.querySelector('button.templette-clear')
+    );
+
+    this.serializeButton = <HTMLButtonElement>(
+      node.querySelector('button.templette-process')
+    );
 
     shadow.adoptedStyleSheets = [global, localStyle];
     shadow.append(node);

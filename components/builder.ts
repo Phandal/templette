@@ -1,4 +1,5 @@
 import globalStyle from '../styles/global.js';
+import type TempletteDocumentOptions from './document-options.js';
 
 // Template
 const template = document.createElement('template');
@@ -22,14 +23,34 @@ localStyle.replaceSync(/* css */ `
 `);
 
 class TempletteBuilder extends HTMLElement {
+  public documentOptions: TempletteDocumentOptions;
+
   constructor() {
     super();
 
     const node = document.importNode(template.content, true);
-
     const shadow = this.attachShadow({ mode: 'open' });
+
+    this.documentOptions = <TempletteDocumentOptions>(
+      node.querySelector('templette-document-options')
+    );
+
     shadow.adoptedStyleSheets = [globalStyle, localStyle];
     shadow.append(node);
+  }
+
+  public getName(): string {
+    const DefaultName = 'Custom_Template';
+    return this.documentOptions.name.getValue() || DefaultName;
+  }
+
+  public build(): Record<string, unknown> {
+    const options = this.documentOptions.getOptions();
+
+    return {
+      ...options,
+      rules: [],
+    };
   }
 }
 

@@ -1,4 +1,5 @@
 import globalStyle from '../styles/global.js';
+import type TempletteMenuBar from './menu-bar.js';
 
 // Template
 const template = document.createElement('template');
@@ -22,14 +23,18 @@ localStyle.replaceSync(/* css */ `
 `);
 
 class TempletteHeader extends HTMLElement {
+  public menuBar: TempletteMenuBar;
+
   constructor() {
     super();
 
     const node = document.importNode(template.content, true);
     const shadow = this.attachShadow({ mode: 'open' });
-    shadow.append(node);
+
+    this.menuBar = <TempletteMenuBar>node.querySelector('templette-menu-bar');
 
     shadow.adoptedStyleSheets = [globalStyle, localStyle];
+    shadow.append(node);
   }
 }
 

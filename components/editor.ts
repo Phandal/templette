@@ -2,7 +2,17 @@ import * as monaco from 'monaco-editor';
 import monacoEditorCSS from 'monaco-editor/min/vs/editor/editor.main.css?inline';
 import globalStyle from '../styles/global.js';
 
-type Language = 'json' | '';
+const InputBoilerPlate =
+  /* json */
+  `{
+  "documentNumber": 3,
+  "members": [
+    {
+      "name": "Jack"
+    }
+  ]
+}
+`;
 
 // Template
 const template = document.createElement('template');
@@ -28,22 +38,24 @@ class TempletteEditor extends HTMLElement {
     super();
 
     const node = document.importNode(template.content, true);
+    const shadow = this.attachShadow({ mode: 'open' });
 
     this._editor = <HTMLDivElement>node.querySelector('div.editor');
     this.editor = undefined;
 
-    const shadow = this.attachShadow({ mode: 'open' });
     shadow.adoptedStyleSheets = [globalStyle, localStyle];
     shadow.append(node);
   }
 
-  private createEditor(lang: Language): monaco.editor.IStandaloneCodeEditor {
+  private createEditor(
+    options: CreateEditorOptions,
+  ): monaco.editor.IStandaloneCodeEditor {
     return monaco.editor.create(this._editor, {
-      language: lang,
-      value: lang,
+      language: options.language,
+      value: options.boilerPlate ? InputBoilerPlate : '',
       wordBasedSuggestions: 'currentDocument',
       automaticLayout: true,
-      readOnly: false,
+      readOnly: options.readonly,
       theme: 'vs-dark',
       minimap: {
         enabled: false,
@@ -54,13 +66,26 @@ class TempletteEditor extends HTMLElement {
     });
   }
 
-  public getLanguage(): string {
-    return this.editor?.getModel()?.getLanguageId() ?? '';
+  public clear(): void {
+    this.editor!.setValue('');
   }
 
-  public connectedCallback() {
+  public getContents(): string {
+    return this.editor!.getValue();
+  }
+
+  public setContents(contents: string): void {
+    this.editor?.setValue(contents);
+  }
+
+  public connectedCallback(): void {
     const langAttr = this.getAttribute('language');
-    this.editor = this.createEditor(isLanguage(langAttr) ? langAttr : '');
+
+    this.editor = this.createEditor({
+      language: isLanguage(langAttr) ? langAttr : '',
+      readonly: this.hasAttribute('readonly'),
+      boilerPlate: this.hasAttribute('boilerplate'),
+    });
   }
 }
 

@@ -84,13 +84,13 @@ class TempletteSegment extends HTMLElement {
   }
 
   addListeners() {
-    this.removeButton?.addEventListener('click', this.removeSegment);
-    this.editButton?.addEventListener('click', this.editSegment);
+    this.removeButton.addEventListener('click', this.removeSegment);
+    this.editButton.addEventListener('click', this.editSegment);
   }
 
   removeListeners() {
-    this.removeButton?.removeEventListener('click', this.removeSegment);
-    this.editButton?.removeEventListener('click', this.editSegment);
+    this.removeButton.removeEventListener('click', this.removeSegment);
+    this.editButton.removeEventListener('click', this.editSegment);
   }
 
   connectedCallback() {

@@ -1,4 +1,5 @@
 import globalStyle from '../styles/global.js';
+import type TempletteInput from './input.js';
 
 // Template
 const template = document.createElement('template');
@@ -27,14 +28,51 @@ localStyle.replaceSync(/* css */ `
 `);
 
 class TempletteDocumentOptions extends HTMLElement {
+  public name: TempletteInput;
+  public version: TempletteInput;
+  public element: TempletteInput;
+  public segment: TempletteInput;
+  public component: TempletteInput;
+  public repetition: TempletteInput;
+
   constructor() {
     super();
 
     const node = document.importNode(template.content, true);
     const shadow = this.attachShadow({ mode: 'open' });
-    shadow.append(node);
+
+    this.name = <TempletteInput>(
+      node.querySelector('templette-input[name="Name"]')
+    );
+    this.version = <TempletteInput>(
+      node.querySelector('templette-input[name="Version"]')
+    );
+    this.element = <TempletteInput>(
+      node.querySelector('templette-input[name="Element"]')
+    );
+    this.segment = <TempletteInput>(
+      node.querySelector('templette-input[name="Segment"]')
+    );
+    this.component = <TempletteInput>(
+      node.querySelector('templette-input[name="Component"]')
+    );
+    this.repetition = <TempletteInput>(
+      node.querySelector('templette-input[name="Repetition"]')
+    );
 
     shadow.adoptedStyleSheets = [globalStyle, localStyle];
+    shadow.append(node);
+  }
+
+  public getOptions(): DocumentOptions {
+    return {
+      name: this.name.getValue(),
+      version: this.version.getValue(),
+      elementSeparator: this.element.getValue(),
+      segmentSeparator: this.segment.getValue(),
+      componentSeparator: this.component.getValue(),
+      repetitionSeparator: this.repetition.getValue(),
+    };
   }
 }
 

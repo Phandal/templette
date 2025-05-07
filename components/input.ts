@@ -19,6 +19,7 @@ localStyle.replaceSync(/* css */ `
   input {
     border-radius: var(--border-radius);
     border-style: none;
+    font-size: large;
   }
 `);
 
@@ -43,17 +44,8 @@ class TempletteInput extends HTMLElement {
     shadow.adoptedStyleSheets = [globalStyle, localStyle];
   }
 
-  public attributeChangedCallback(
-    attr: string,
-    _: string,
-    newVal: string,
-  ): void {
-    // console.log('attr | new | old:', `${attr} | ${oldVal} | ${newVal}`);
-    switch (attr) {
-      case 'name':
-        this.update(newVal);
-        break;
-    }
+  public getValue(): string {
+    return this.inputNode.value ?? '';
   }
 
   update(value: string): void {
@@ -62,6 +54,18 @@ class TempletteInput extends HTMLElement {
 
     this.inputNode.setAttribute('id', value);
     this.inputNode.setAttribute('name', value);
+  }
+
+  public attributeChangedCallback(
+    attr: string,
+    _: string,
+    newVal: string,
+  ): void {
+    switch (attr) {
+      case 'name':
+        this.update(newVal);
+        break;
+    }
   }
 }
 

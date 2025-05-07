@@ -71,12 +71,9 @@ class TempletteSegmentList extends HTMLElement {
     this.shadow.append(node);
   }
 
-  addSegment(ev: Event) {
-    const { detail: options } = <CustomEvent<CreateSegment>>ev;
-
+  addSegment(_ev: Event) {
     const segmentComponent = new TempletteSegment();
-    segmentComponent.setAttribute('segment-id', options.id);
-    segmentComponent.setAttribute('segment-name', options.name);
+    segmentComponent.setAttribute('segment-name', 'Segment_Name');
 
     segmentComponent.addEventListener('remove-segment', this.removeSegment);
     segmentComponent.addEventListener('edit-segment', this.editSegment);
@@ -87,7 +84,6 @@ class TempletteSegmentList extends HTMLElement {
 
   removeSegment(ev: Event) {
     const customEvent = <CustomEvent<RemoveSegment>>ev;
-    console.log('removing segment with id', customEvent.detail.id);
 
     this.segments = this.segments.filter((segment) => {
       return segment.segmentId !== customEvent.detail.id;
@@ -98,15 +94,21 @@ class TempletteSegmentList extends HTMLElement {
     const customEvent = <CustomEvent<EditSegment>>ev;
     console.log('editing segment with id', customEvent.detail.id);
 
+    const segment = this.segments.find((segment) => {
+      return segment.segmentId === customEvent.detail.id;
+    });
+
+    console.log('segment', segment);
+
     this.sideCard?.classList.add('open');
   }
 
   addListeners() {
-    this.addButton?.addEventListener('click', this.addSegment);
+    this.addButton.addEventListener('click', this.addSegment);
   }
 
   removeListeners() {
-    this.addButton?.removeEventListener('click', this.addSegment);
+    this.addButton.removeEventListener('click', this.addSegment);
   }
 
   connectedCallback() {

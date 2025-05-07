@@ -14,12 +14,3 @@
   --header-padding: 5px;
   --border-radius: 4px;
 }
-
-
-body {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: 10px;
-  height: 100vh;
-  background-color: var(--clr-white);
-}
