@@ -1,7 +1,12 @@
+import Ajv, { type AnySchemaObject, type ErrorObject } from 'ajv';
+import type { CurrentOptions } from 'ajv/dist/core.js';
 import globalStyle from '../styles/global.js';
-import type TempletteHeader from './header.js';
 import type TempletteBuilder from './builder.js';
+import type TempletteHeader from './header.js';
 import type TempletteIO from './io.js';
+
+const BaseSchemaUrl =
+  'https://storageukgreadyedi.blob.core.windows.net/schema-files/';
 
 // Template
 const template = document.createElement('template');
@@ -66,6 +71,9 @@ class TempletteApp extends HTMLElement {
     shadow.append(node);
   }
 
+  /**
+   * Actually performs the file loading with a hidden input field
+   */
   private loadFile(e: Event): void {
     const files = (<HTMLInputElement>e.target).files;
     if (!files || files.length === 0) return;
@@ -74,11 +82,30 @@ class TempletteApp extends HTMLElement {
     const file = files[0];
     const reader = new FileReader();
 
-    reader.onload = (e) => {
-      if (!e.target) return;
-      const fileContents = e.target.result || '';
+    reader.onload = async (e): Promise<void> => {
+      try {
+        if (!e.target) return;
+        const fileContents = e.target.result?.toString() || '';
 
-      outputEditor.setContents(fileContents.toString());
+        const response = await validateSchema(fileContents, {
+          loadSchema: loadSchemaHTTPS,
+        });
+
+        if (response.valid) {
+          this.parseTemplate(response.template);
+        } else {
+          const responseErrors = response.errors
+            .map(
+              (err: ErrorObject) =>
+                `${err.message} | ${err.instancePath} | ${err.schemaPath}`,
+            )
+            .join(',');
+          outputEditor.setContents(responseErrors);
+          this.builder.documentOptions.setOptions();
+        }
+      } catch (err) {
+        outputEditor.setContents(`Error validating schema: ${err}`);
+      }
     };
 
     reader.onerror = (e) => {
@@ -89,13 +116,22 @@ class TempletteApp extends HTMLElement {
   }
 
   /**
+   * Parses a template object to build all of the UI components
+   */
+  private parseTemplate(templ: Template): void {
+    this.io.clearOutput();
+    this.builder.documentOptions.setOptions(templ);
+  }
+
+  /**
    * Saves a template to a file.
    */
   private save(): void {
     const name = this.builder.getName();
-    const template = JSON.stringify(this.builder.build(), null, 2);
+    const template = this.builder.build();
+    const templateStr = JSON.stringify(template, null, 2);
 
-    const templateBlob = new Blob([template], { type: 'application/json' });
+    const templateBlob = new Blob([templateStr], { type: 'application/json' });
     const url = URL.createObjectURL(templateBlob);
 
     const link = document.createElement('a');
@@ -109,7 +145,6 @@ class TempletteApp extends HTMLElement {
    * Loads a template from a file.
    */
   private load(): void {
-    // Use a hidden <input type="file"> to get trigger the file open dialog
     this.inputFile.click();
   }
 
@@ -122,7 +157,7 @@ class TempletteApp extends HTMLElement {
 
   /**
    * Serializes the data according to the template.
-   * TODO
+   * TODO: Make the http request to the server
    */
   private serialize(): void {
     const template = this.builder.build();
@@ -146,6 +181,7 @@ class TempletteApp extends HTMLElement {
   private removeListeners(): void {
     const menuBar = this.header.menuBar;
 
+    this.inputFile.removeEventListener('change', this.loadFile);
     menuBar.saveButton.removeEventListener('click', this.save);
     menuBar.loadButton.removeEventListener('click', this.load);
     menuBar.clearButton.removeEventListener('click', this.clear);
@@ -162,5 +198,75 @@ class TempletteApp extends HTMLElement {
 }
 
 window.customElements.define('templette-app', TempletteApp);
+
+async function validateSchema(
+  contents: string,
+  options: CurrentOptions,
+): Promise<ValidationResponse> {
+  const templ = <Record<string, unknown>>JSON.parse(contents);
+
+  const version = templ.version;
+
+  if (!version) {
+    return {
+      valid: false,
+      errors: [
+        {
+          instancePath: '/',
+          schemaPath: '#/required',
+          keyword: 'required',
+          params: { missingProperty: 'version' },
+          message: 'must have required property version',
+        },
+      ],
+    };
+  }
+
+  const schemaUrl = `${BaseSchemaUrl}v${version}/template.json`;
+
+  try {
+    const ajv = new Ajv(options);
+    const validate = await ajv.compileAsync({ $ref: schemaUrl });
+
+    const valid = validate(templ);
+
+    if (valid) {
+      return {
+        valid: true,
+        template: templ as unknown as Template,
+      };
+    }
+
+    return {
+      valid: false,
+      errors: validate.errors || [],
+    };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'unknown error';
+    throw new Error(
+      `failed to fetch schema definition from '${schemaUrl}': ${message}`,
+    );
+  }
+}
+
+async function loadSchemaHTTPS(uri: string): Promise<AnySchemaObject> {
+  const res = await fetch(uri, { method: 'GET' });
+  if (!res.ok) {
+    throw new Error(`schema loading error: ${res.status}`);
+  }
+
+  let body: AnySchemaObject;
+  try {
+    body = <AnySchemaObject>await res.json();
+  } catch (err) {
+    let message = 'unknown error';
+    if (err instanceof Error) {
+      message = err.message;
+    }
+    throw new Error(`schema parsing error: ${message}`);
+  }
+
+  return body;
+}
 
 export default TempletteApp;

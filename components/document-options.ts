@@ -25,6 +25,10 @@ localStyle.replaceSync(/* css */ `
     padding: 10px 0px;
     border-radius: var(--border-radius);
   }
+
+  templette-input[name="Name"] {
+    grid-column-span: 3;
+  }
 `);
 
 class TempletteDocumentOptions extends HTMLElement {
@@ -73,6 +77,24 @@ class TempletteDocumentOptions extends HTMLElement {
       componentSeparator: this.component.getValue(),
       repetitionSeparator: this.repetition.getValue(),
     };
+  }
+
+  public setOptions(templ?: Template): void {
+    if (templ) {
+      this.name.setValue(templ.name);
+      this.version.setValue(templ.version);
+      this.element.setValue(templ.elementSeparator);
+      this.segment.setValue(templ.segmentSeparator);
+      this.component.setValue(templ.componentSeparator);
+      this.repetition.setValue(templ.repetitionSeparator);
+    } else {
+      this.name.setValue('');
+      this.version.setValue('');
+      this.element.setValue('');
+      this.segment.setValue('');
+      this.component.setValue('');
+      this.repetition.setValue('');
+    }
   }
 }
 

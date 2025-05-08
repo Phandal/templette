@@ -48,6 +48,10 @@ class TempletteInput extends HTMLElement {
     return this.inputNode.value ?? '';
   }
 
+  public setValue(val: string): void {
+    this.inputNode.value = val;
+  }
+
   update(value: string): void {
     this.labelNode.setAttribute('for', value);
     this.labelNode.textContent = value;
