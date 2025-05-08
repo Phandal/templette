@@ -11,8 +11,7 @@ const InputBoilerPlate =
       "name": "Jack"
     }
   ]
-}
-`;
+}`;
 
 // Template
 const template = document.createElement('template');

@@ -7,6 +7,7 @@ import type TempletteIO from './io.js';
 const template = document.createElement('template');
 template.id = 'templette-app-template';
 template.innerHTML = /* html */ `
+  <input type=file id="hidden-file-input" hidden>
   <templette-header></templette-header>
   <div class="app">
     <templette-builder></templette-builder>
@@ -40,6 +41,7 @@ class TempletteApp extends HTMLElement {
   private header: TempletteHeader;
   private builder: TempletteBuilder;
   private io: TempletteIO;
+  private inputFile: HTMLInputElement;
 
   constructor() {
     super();
@@ -50,7 +52,11 @@ class TempletteApp extends HTMLElement {
     this.header = <TempletteHeader>node.querySelector('templette-header');
     this.builder = <TempletteBuilder>node.querySelector('templette-builder');
     this.io = <TempletteIO>node.querySelector('templette-io');
+    this.inputFile = <HTMLInputElement>(
+      node.querySelector('input#hidden-file-input')
+    );
 
+    this.loadFile = this.loadFile.bind(this);
     this.save = this.save.bind(this);
     this.load = this.load.bind(this);
     this.clear = this.clear.bind(this);
@@ -58,6 +64,28 @@ class TempletteApp extends HTMLElement {
 
     shadow.adoptedStyleSheets = [globalStyle, localStyle];
     shadow.append(node);
+  }
+
+  private loadFile(e: Event): void {
+    const files = (<HTMLInputElement>e.target).files;
+    if (!files || files.length === 0) return;
+    const outputEditor = this.io.outputEditor;
+
+    const file = files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      if (!e.target) return;
+      const fileContents = e.target.result || '';
+
+      outputEditor.setContents(fileContents.toString());
+    };
+
+    reader.onerror = (e) => {
+      outputEditor.setContents(`Error reading file: ${e}`);
+    };
+
+    reader.readAsText(file);
   }
 
   /**
@@ -79,11 +107,10 @@ class TempletteApp extends HTMLElement {
 
   /**
    * Loads a template from a file.
-   * TODO
    */
   private load(): void {
     // Use a hidden <input type="file"> to get trigger the file open dialog
-    console.log('Load');
+    this.inputFile.click();
   }
 
   /**
@@ -109,6 +136,7 @@ class TempletteApp extends HTMLElement {
   private addListeners(): void {
     const menuBar = this.header.menuBar;
 
+    this.inputFile.addEventListener('change', this.loadFile);
     menuBar.saveButton.addEventListener('click', this.save);
     menuBar.loadButton.addEventListener('click', this.load);
     menuBar.clearButton.addEventListener('click', this.clear);
