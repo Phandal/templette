@@ -1,6 +1,6 @@
 import globalStyle from '../styles/global.js';
+import TempletteSegmentEditor from './segment-editor.js';
 import TempletteSegment from './segment.js';
-import TempletteSideCard from './sidecard.js';
 
 // Template
 const template = document.createElement('template');
@@ -57,7 +57,6 @@ class TempletteSegmentList extends HTMLElement {
     this.addButton = <HTMLButtonElement>(
       node.querySelector('button.segment-list-add')
     );
-    // this.sideCard = <TempletteSideCard>node.querySelector('templette-sidecard');
     this.list = <HTMLUListElement>node.querySelector('ul');
 
     this.addSegment = this.addSegment.bind(this);
@@ -104,11 +103,11 @@ class TempletteSegmentList extends HTMLElement {
 
     console.log('segment', segment);
 
-    const sideCard = new TempletteSideCard();
-    this.shadow.append(sideCard);
+    const segmentEditor = new TempletteSegmentEditor();
+    this.shadow.append(segmentEditor);
 
     requestAnimationFrame(() => {
-      sideCard.classList.add('open');
+      segmentEditor.classList.add('open');
     });
   }
 

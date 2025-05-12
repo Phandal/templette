@@ -25,8 +25,9 @@ import './components/logo.js';
 import './components/menu-bar.js';
 import './components/header.js';
 
-// SideCard
-import './components/sidecard.js';
+// Sidecards
+import './components/segment-editor.js';
+import './components/element-editor.js';
 
 // Builder
 import './components/input.js';

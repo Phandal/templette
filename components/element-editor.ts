@@ -3,9 +3,9 @@ import globalStyle from '../styles/global.js';
 // Template
 const template = document.createElement('template');
 
-template.id = 'templette-sidecard-template';
+template.id = 'templette-element-editor-template';
 template.innerHTML = /* html */ `
-  <p>options go here</p>
+  <p>element options go here</p>
   <button class="close">X</button>
 `;
 
@@ -30,7 +30,7 @@ localStyle.replaceSync(/* css */ `
   }
 `);
 
-class TempletteSideCard extends HTMLElement {
+class TempletteElementEditor extends HTMLElement {
   private shadow: ShadowRoot;
   public closeButton: HTMLButtonElement;
 
@@ -49,35 +49,38 @@ class TempletteSideCard extends HTMLElement {
     this.shadow.append(node);
   }
 
-  close() {
+  public close(): void {
     this.classList.remove('open');
   }
 
-  remove() {
+  public remove(): void {
     if (!this.classList.contains('open')) {
       this.parentNode?.removeChild(this);
     }
   }
 
-  addListeners() {
-    this.closeButton?.addEventListener('click', this.close);
+  public addListeners(): void {
+    this.closeButton.addEventListener('click', this.close);
     this.addEventListener('transitionend', this.remove);
   }
 
-  removeListeners() {
-    this.closeButton?.removeEventListener('click', this.close);
+  public removeListeners(): void {
+    this.closeButton.removeEventListener('click', this.close);
     this.removeEventListener('transitionend', this.remove);
   }
 
-  connectedCallback() {
+  public connectedCallback() {
     this.addListeners();
   }
 
-  disconnectedCallback() {
+  public disconnectedCallback() {
     this.removeListeners();
   }
 }
 
-window.customElements.define('templette-sidecard', TempletteSideCard);
+window.customElements.define(
+  'templette-element-editor',
+  TempletteElementEditor,
+);
 
-export default TempletteSideCard;
+export default TempletteElementEditor;
