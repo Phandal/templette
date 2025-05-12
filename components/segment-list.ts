@@ -1,6 +1,6 @@
 import globalStyle from '../styles/global.js';
 import TempletteSegment from './segment.js';
-import type TempletteSideCard from './sidecard.js';
+import TempletteSideCard from './sidecard.js';
 
 // Template
 const template = document.createElement('template');
@@ -10,7 +10,6 @@ template.innerHTML = /* html */ `
   <div class="overflow-list">
     <ul class="templette-segment-list"></ul>
   </div>
-  <templette-sidecard></templette-sidecard>
 `;
 
 // Style
@@ -45,7 +44,6 @@ localStyle.replaceSync(/* css */ `
 
 class TempletteSegmentList extends HTMLElement {
   public shadow: ShadowRoot;
-  public sideCard: TempletteSideCard;
   public list: HTMLUListElement;
   public addButton: HTMLButtonElement;
 
@@ -59,7 +57,7 @@ class TempletteSegmentList extends HTMLElement {
     this.addButton = <HTMLButtonElement>(
       node.querySelector('button.segment-list-add')
     );
-    this.sideCard = <TempletteSideCard>node.querySelector('templette-sidecard');
+    // this.sideCard = <TempletteSideCard>node.querySelector('templette-sidecard');
     this.list = <HTMLUListElement>node.querySelector('ul');
 
     this.addSegment = this.addSegment.bind(this);
@@ -71,7 +69,13 @@ class TempletteSegmentList extends HTMLElement {
     this.shadow.append(node);
   }
 
-  addSegment(_ev: Event) {
+  public getRules(): SegmentRule[] {
+    return this.segments.map((segment) => {
+      return segment.getSegment();
+    });
+  }
+
+  public addSegment(_ev: Event): void {
     const segmentComponent = new TempletteSegment();
     segmentComponent.setAttribute('segment-name', 'Segment_Name');
 
@@ -79,43 +83,48 @@ class TempletteSegmentList extends HTMLElement {
     segmentComponent.addEventListener('edit-segment', this.editSegment);
 
     this.segments.push(segmentComponent);
-    this.list?.appendChild(segmentComponent);
+    this.list?.append(segmentComponent);
   }
 
-  removeSegment(ev: Event) {
+  public removeSegment(ev: Event): void {
     const customEvent = <CustomEvent<RemoveSegment>>ev;
 
     this.segments = this.segments.filter((segment) => {
-      return segment.segmentId !== customEvent.detail.id;
+      return segment.guid !== customEvent.detail.id;
     });
   }
 
-  editSegment(ev: Event) {
+  public editSegment(ev: Event): void {
     const customEvent = <CustomEvent<EditSegment>>ev;
     console.log('editing segment with id', customEvent.detail.id);
 
     const segment = this.segments.find((segment) => {
-      return segment.segmentId === customEvent.detail.id;
+      return segment.guid === customEvent.detail.id;
     });
 
     console.log('segment', segment);
 
-    this.sideCard?.classList.add('open');
+    const sideCard = new TempletteSideCard();
+    this.shadow.append(sideCard);
+
+    requestAnimationFrame(() => {
+      sideCard.classList.add('open');
+    });
   }
 
-  addListeners() {
+  public addListeners(): void {
     this.addButton.addEventListener('click', this.addSegment);
   }
 
-  removeListeners() {
+  public removeListeners(): void {
     this.addButton.removeEventListener('click', this.addSegment);
   }
 
-  connectedCallback() {
+  public connectedCallback(): void {
     this.addListeners();
   }
 
-  disconnectedCallback() {
+  public disconnectedCallback(): void {
     this.removeListeners();
   }
 }

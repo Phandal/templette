@@ -6,13 +6,29 @@ template.innerHTML = /* html */ `
 `;
 
 class TempletteElement extends HTMLElement {
+  private name: string;
+  private value: string;
+  private elementAttributes: ElementRuleAttribute;
+
   constructor() {
     super();
 
     const node = document.importNode(template.content, true);
     const shadow = this.attachShadow({ mode: 'open' });
 
+    this.name = '';
+    this.value = '';
+    this.elementAttributes = {};
+
     shadow.append(node);
+  }
+
+  public getElement(): ElementRule {
+    return {
+      name: this.name,
+      value: this.value,
+      attributes: this.elementAttributes,
+    };
   }
 }
 

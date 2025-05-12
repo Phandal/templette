@@ -1,5 +1,6 @@
 import globalStyle from '../styles/global.js';
 import type TempletteDocumentOptions from './document-options.js';
+import type TempletteSegmentList from './segment-list.js';
 
 // Template
 const template = document.createElement('template');
@@ -24,6 +25,7 @@ localStyle.replaceSync(/* css */ `
 
 class TempletteBuilder extends HTMLElement {
   public documentOptions: TempletteDocumentOptions;
+  public segmentList: TempletteSegmentList;
 
   constructor() {
     super();
@@ -33,6 +35,10 @@ class TempletteBuilder extends HTMLElement {
 
     this.documentOptions = <TempletteDocumentOptions>(
       node.querySelector('templette-document-options')
+    );
+
+    this.segmentList = <TempletteSegmentList>(
+      node.querySelector('templette-segment-list')
     );
 
     shadow.adoptedStyleSheets = [globalStyle, localStyle];
@@ -46,10 +52,11 @@ class TempletteBuilder extends HTMLElement {
 
   public build(): Record<string, unknown> {
     const options = this.documentOptions.getOptions();
+    const rules = this.segmentList.getRules();
 
     return {
       ...options,
-      rules: [],
+      rules,
     };
   }
 }

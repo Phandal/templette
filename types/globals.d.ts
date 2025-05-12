@@ -94,7 +94,7 @@ declare global {
   };
 
   type ElementRuleAttribute = {
-    length: LengthAttribute;
+    length?: LengthAttribute;
   };
 
   export type LengthAttribute = {

@@ -37,14 +37,21 @@ localStyle.replaceSync(/* css */ `
 `);
 
 class TempletteSegment extends HTMLElement {
-  public segmentId = '';
-  public segmentName = '';
+  public guid = '';
+  public name = '';
+  public container = false;
+  public elements: TempletteElement[] = [];
+  public descendants: TempletteSegment[] = [];
+  public filter?: Filter;
+  public repetition?: Repetition;
+  public ignore?: string;
+  public trim?: boolean;
+  public closeRule?: CloseSegmentRule;
+
   public elementCount: HTMLParagraphElement;
   public childrenCount: HTMLParagraphElement;
   public editButton: HTMLButtonElement;
   public removeButton: HTMLButtonElement;
-
-  public elements: TempletteElement[] = [];
 
   constructor() {
     super();
@@ -68,38 +75,71 @@ class TempletteSegment extends HTMLElement {
     shadow.append(node);
   }
 
-  removeSegment() {
+  public getSegment(): SegmentRule {
+    const children = this.descendants.map((child) => {
+      return child.getSegment();
+    });
+
+    const elements = this.elements.map((element) => {
+      return element.getElement();
+    });
+
+    if (this.container) {
+      return {
+        name: this.name,
+        children,
+        container: true,
+        filter: this.filter,
+        repetition: this.repetition,
+        ignore: this.ignore,
+      };
+    }
+
+    return {
+      name: this.name,
+      elements,
+      children,
+      container: false,
+      filter: this.filter,
+      repetition: this.repetition,
+      ignore: this.ignore,
+      trim: this.trim,
+      closeRule: undefined, // TODO
+    };
+  }
+
+  public removeSegment(): void {
     console.log('removing this segment');
     this.dispatchEvent(
-      new CustomEvent('remove-segment', { detail: { id: this.segmentId } }),
+      new CustomEvent('remove-segment', { detail: { id: this.guid } }),
     );
     this.remove();
   }
 
-  editSegment() {
+  public editSegment(): void {
     console.log('editing this segment');
     this.dispatchEvent(
-      new CustomEvent('edit-segment', { detail: { id: this.segmentId } }),
+      new CustomEvent('edit-segment', { detail: { id: this.guid } }),
     );
   }
 
-  addListeners() {
+  public addListeners(): void {
     this.removeButton.addEventListener('click', this.removeSegment);
     this.editButton.addEventListener('click', this.editSegment);
   }
 
-  removeListeners() {
+  public removeListeners(): void {
     this.removeButton.removeEventListener('click', this.removeSegment);
     this.editButton.removeEventListener('click', this.editSegment);
   }
 
-  connectedCallback() {
-    this.segmentId = crypto.randomUUID();
+  public connectedCallback(): void {
+    this.guid = crypto.randomUUID();
 
     this.addListeners();
   }
 
-  disconnectedCallback() {
+  public disconnectedCallback(): void {
     this.removeListeners();
   }
 }

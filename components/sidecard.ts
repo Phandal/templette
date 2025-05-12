@@ -18,7 +18,7 @@ localStyle.replaceSync(/* css */ `
     bottom: 0;
     left: -100%;
     width: 100%;
-    transition: left 0.2s ease-in-out;
+    transition: left 0.2s linear;
     z-index: 10;
     background: var(--clr-white);
     box-shadow: 2px 0 5px rgba(0,0,0,0.2);
@@ -43,6 +43,7 @@ class TempletteSideCard extends HTMLElement {
     this.closeButton = <HTMLButtonElement>node.querySelector('button.close');
 
     this.close = this.close.bind(this);
+    this.remove = this.remove.bind(this);
 
     this.shadow.adoptedStyleSheets = [globalStyle, localStyle];
     this.shadow.append(node);
@@ -52,12 +53,20 @@ class TempletteSideCard extends HTMLElement {
     this.classList.remove('open');
   }
 
+  remove() {
+    if (!this.classList.contains('open')) {
+      this.parentNode?.removeChild(this);
+    }
+  }
+
   addListeners() {
     this.closeButton?.addEventListener('click', this.close);
+    this.addEventListener('transitionend', this.remove);
   }
 
   removeListeners() {
     this.closeButton?.removeEventListener('click', this.close);
+    this.removeEventListener('transitionend', this.remove);
   }
 
   connectedCallback() {
