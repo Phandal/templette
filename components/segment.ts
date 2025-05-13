@@ -6,10 +6,10 @@ const template = document.createElement('template');
 template.id = 'templette-segment-template';
 template.innerHTML = /* html */ `
 <li class="segment-content">
-  <p>Segment_Name</p>
+  <p class="segment-name"></p>
     <div class="segment-counts">
-      <p class="element-count"># Elements</p>
-      <p class="children-count"># Children</p>
+      <p class="element-count"></p>
+      <p class="children-count"></p>
     </div>
     <div class="segment-actions">
       <button class="edit">Edit</button>
@@ -48,8 +48,9 @@ class TempletteSegment extends HTMLElement {
   public trim?: boolean;
   public closeRule?: CloseSegmentRule;
 
-  public elementCount: HTMLParagraphElement;
-  public childrenCount: HTMLParagraphElement;
+  public segmentNameParagragh: HTMLParagraphElement;
+  public elementCountParagraph: HTMLParagraphElement;
+  public childrenCountParagraph: HTMLParagraphElement;
   public editButton: HTMLButtonElement;
   public removeButton: HTMLButtonElement;
 
@@ -58,10 +59,13 @@ class TempletteSegment extends HTMLElement {
 
     const node = document.importNode(template.content, true);
 
-    this.elementCount = <HTMLParagraphElement>(
+    this.segmentNameParagragh = <HTMLParagraphElement>(
+      node.querySelector('p.segment-name')
+    );
+    this.elementCountParagraph = <HTMLParagraphElement>(
       node.querySelector('p.element-count')
     );
-    this.childrenCount = <HTMLParagraphElement>(
+    this.childrenCountParagraph = <HTMLParagraphElement>(
       node.querySelector('p.children-count')
     );
     this.editButton = <HTMLButtonElement>node.querySelector('button.edit');
@@ -108,10 +112,30 @@ class TempletteSegment extends HTMLElement {
     };
   }
 
+  public setSegment(rule: SegmentRule) {
+    // TODO set children and elements recursively
+    this.name = rule.name;
+    this.filter = rule.filter;
+    this.repetition = rule.repetition;
+    this.ignore = rule.ignore;
+
+    if (rule.container) {
+      this.container = true;
+    } else {
+      this.container = false;
+      this.trim = rule.trim;
+      this.closeRule = rule.closeRule;
+    }
+
+    this.update();
+  }
+
   public removeSegment(): void {
     console.log('removing this segment');
     this.dispatchEvent(
-      new CustomEvent('remove-segment', { detail: { id: this.guid } }),
+      new CustomEvent<RemoveSegment>('remove-segment', {
+        detail: { id: this.guid },
+      }),
     );
     this.remove();
   }
@@ -119,8 +143,16 @@ class TempletteSegment extends HTMLElement {
   public editSegment(): void {
     console.log('editing this segment');
     this.dispatchEvent(
-      new CustomEvent('edit-segment', { detail: { id: this.guid } }),
+      new CustomEvent<EditSegment>('edit-segment', {
+        detail: { id: this.guid },
+      }),
     );
+  }
+
+  public update(): void {
+    this.segmentNameParagragh.textContent = this.name;
+    this.elementCountParagraph.textContent = `${this.elements.length.toString()} Elements`;
+    this.childrenCountParagraph.textContent = `${this.descendants.length.toString()} Children`;
   }
 
   public addListeners(): void {
@@ -135,8 +167,10 @@ class TempletteSegment extends HTMLElement {
 
   public connectedCallback(): void {
     this.guid = crypto.randomUUID();
+    this.name = 'New Segment';
 
     this.addListeners();
+    this.update();
   }
 
   public disconnectedCallback(): void {

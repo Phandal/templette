@@ -7,6 +7,10 @@ declare global {
     id: string;
   };
 
+  type UpdateSegment = {
+    rule: SegmentRule;
+  };
+
   type DocumentOptions = {
     name: string;
     version: string;

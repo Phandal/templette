@@ -1,12 +1,27 @@
 import globalStyle from '../styles/global.js';
+import type TempletteInput from './input.js';
+import type TempletteSegment from './segment.js';
 
 // Template
 const template = document.createElement('template');
 
 template.id = 'templette-segment-editor-template';
 template.innerHTML = /* html */ `
-  <p>options go here</p>
-  <button class="close">X</button>
+  <templette-input name="Name" type="text"></templette-input>
+  <templette-input name="Container" type="checkbox"></templette-input>
+  <templette-input name="Trim" type="checkbox"></templette-input>
+  <templette-input name="Ignore" type="text"></templette-input>
+  <!-- TODO<templette-repetition></templette-repetition> -->
+  <!-- TODO<templette-filter></templette-filter> -->
+  <div style="height: 20%;">
+    <templette-segment-list></templette-segment-list>
+  </div>
+  <div style="height: 20%;">
+    <!-- TODO<templette-element-list></templette-element-list> -->
+  </div>
+  <!-- TODO<templette-closerule></templette-closerule> -->
+  <button class="close">Cancel</button>
+  <button class="save">Save</button>
 `;
 
 // Style
@@ -31,8 +46,14 @@ localStyle.replaceSync(/* css */ `
 `);
 
 class TempletteSegmentEditor extends HTMLElement {
+  public nameInput: TempletteInput;
+  public containerInput: TempletteInput;
+  public ignoreInput: TempletteInput;
+  public trimInput: TempletteInput;
+
   private shadow: ShadowRoot;
   public closeButton: HTMLButtonElement;
+  public saveButton: HTMLButtonElement;
 
   constructor() {
     super();
@@ -40,17 +61,76 @@ class TempletteSegmentEditor extends HTMLElement {
     const node = document.importNode(template.content, true);
     this.shadow = this.attachShadow({ mode: 'open' });
 
+    this.nameInput = <TempletteInput>(
+      node.querySelector('templette-input[name="Name"]')
+    );
+    this.containerInput = <TempletteInput>(
+      node.querySelector('templette-input[name="Container"]')
+    );
+    this.ignoreInput = <TempletteInput>(
+      node.querySelector('templette-input[name="Ignore"]')
+    );
+    this.trimInput = <TempletteInput>(
+      node.querySelector('templette-input[name="Trim"]')
+    );
     this.closeButton = <HTMLButtonElement>node.querySelector('button.close');
+    this.saveButton = <HTMLButtonElement>node.querySelector('button.save');
 
     this.close = this.close.bind(this);
+    this.save = this.save.bind(this);
     this.remove = this.remove.bind(this);
 
     this.shadow.adoptedStyleSheets = [globalStyle, localStyle];
     this.shadow.append(node);
   }
 
+  public loadSegment(segment: TempletteSegment): void {
+    const rule = segment.getSegment();
+    this.nameInput.setValue(rule.name);
+    this.containerInput.setValue(rule.container);
+    this.ignoreInput.setValue(rule.ignore);
+
+    if (rule.container) {
+      // TODO set container specific fields
+    } else {
+      this.trimInput.setValue(rule.trim);
+    }
+  }
+
+  public getSegment(): SegmentRule {
+    if (this.containerInput.getValue()) {
+      return {
+        name: <string>this.nameInput.getValue(),
+        children: [],
+        container: true,
+        ignore: <string>this.ignoreInput.getValue(),
+      };
+    }
+
+    return {
+      name: <string>this.nameInput.getValue(),
+      elements: [],
+      children: [],
+      container: <boolean>this.nameInput.getValue(),
+      ignore: <string>this.ignoreInput.getValue(),
+      trim: <boolean>this.trimInput.getValue(),
+      closeRule: undefined, // TODO
+    };
+  }
+
   public close(): void {
     this.classList.remove('open');
+  }
+
+  public save(): void {
+    this.dispatchEvent(
+      new CustomEvent<UpdateSegment>('update-segment', {
+        detail: {
+          rule: this.getSegment(),
+        },
+      }),
+    );
+    this.close();
   }
 
   public remove(): void {
@@ -61,11 +141,13 @@ class TempletteSegmentEditor extends HTMLElement {
 
   public addListeners(): void {
     this.closeButton.addEventListener('click', this.close);
+    this.saveButton.addEventListener('click', this.save);
     this.addEventListener('transitionend', this.remove);
   }
 
   public removeListeners(): void {
     this.closeButton.removeEventListener('click', this.close);
+    this.saveButton.removeEventListener('click', this.save);
     this.removeEventListener('transitionend', this.remove);
   }
 

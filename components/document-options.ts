@@ -5,12 +5,12 @@ import type TempletteInput from './input.js';
 const template = document.createElement('template');
 template.id = 'templette-document-options-template';
 template.innerHTML = /* html */ `
-  <templette-input name="Name"></templette-input>
-  <templette-input name="Version"></templette-input>
-  <templette-input name="Element"></templette-input>
-  <templette-input name="Segment"></templette-input>
-  <templette-input name="Component"></templette-input>
-  <templette-input name="Repetition"></templette-input>
+  <templette-input type="text" name="Name"></templette-input>
+  <templette-input type="text" name="Version"></templette-input>
+  <templette-input type="text" name="Element"></templette-input>
+  <templette-input type="text" name="Segment"></templette-input>
+  <templette-input type="text" name="Component"></templette-input>
+  <templette-input type="text" name="Repetition"></templette-input>
 `;
 
 // Style
@@ -70,12 +70,12 @@ class TempletteDocumentOptions extends HTMLElement {
 
   public getOptions(): DocumentOptions {
     return {
-      name: this.name.getValue(),
-      version: this.version.getValue(),
-      elementSeparator: this.element.getValue(),
-      segmentSeparator: this.segment.getValue(),
-      componentSeparator: this.component.getValue(),
-      repetitionSeparator: this.repetition.getValue(),
+      name: <string>this.name.getValue(),
+      version: <string>this.version.getValue(),
+      elementSeparator: <string>this.element.getValue(),
+      segmentSeparator: <string>this.segment.getValue(),
+      componentSeparator: <string>this.component.getValue(),
+      repetitionSeparator: <string>this.repetition.getValue(),
     };
   }
 

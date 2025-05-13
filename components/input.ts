@@ -5,7 +5,7 @@ const template = document.createElement('template');
 template.id = 'templette-input-template';
 template.innerHTML = /* html */ `
   <label for></label>
-  <input type="text" id name />
+  <input type id name />
 `;
 
 // Style
@@ -44,32 +44,42 @@ class TempletteInput extends HTMLElement {
     shadow.adoptedStyleSheets = [globalStyle, localStyle];
   }
 
-  public getValue(): string {
-    return this.inputNode.value ?? '';
-  }
+  public getValue(): string | boolean {
+    const type = this.getAttribute('type');
 
-  public setValue(val: string): void {
-    this.inputNode.value = val;
-  }
-
-  update(value: string): void {
-    this.labelNode.setAttribute('for', value);
-    this.labelNode.textContent = value;
-
-    this.inputNode.setAttribute('id', value);
-    this.inputNode.setAttribute('name', value);
-  }
-
-  public attributeChangedCallback(
-    attr: string,
-    _: string,
-    newVal: string,
-  ): void {
-    switch (attr) {
-      case 'name':
-        this.update(newVal);
-        break;
+    if (type === 'text') {
+      return this.inputNode.value ?? '';
     }
+    return this.inputNode.checked;
+  }
+
+  public setValue(val?: string | boolean): void {
+    const type = this.getAttribute('type');
+
+    if (type === 'text') {
+      this.inputNode.value = val ? val.toString() : '';
+    } else if (type === 'checkbox') {
+      this.inputNode.checked = !!val;
+    }
+  }
+
+  update(): void {
+    const name = this.getAttribute('name') || '';
+
+    this.labelNode.setAttribute('for', name);
+    this.labelNode.textContent = name;
+
+    this.inputNode.setAttribute('id', name);
+    this.inputNode.setAttribute('name', name);
+  }
+
+  public connectedCallback(): void {
+    const type = this.getAttribute('type') || 'text';
+    this.inputNode.setAttribute('type', type);
+  }
+
+  public attributeChangedCallback(): void {
+    this.update();
   }
 }
 

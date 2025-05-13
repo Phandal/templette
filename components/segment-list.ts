@@ -76,7 +76,6 @@ class TempletteSegmentList extends HTMLElement {
 
   public addSegment(_ev: Event): void {
     const segmentComponent = new TempletteSegment();
-    segmentComponent.setAttribute('segment-name', 'Segment_Name');
 
     segmentComponent.addEventListener('remove-segment', this.removeSegment);
     segmentComponent.addEventListener('edit-segment', this.editSegment);
@@ -95,20 +94,37 @@ class TempletteSegmentList extends HTMLElement {
 
   public editSegment(ev: Event): void {
     const customEvent = <CustomEvent<EditSegment>>ev;
-    console.log('editing segment with id', customEvent.detail.id);
 
     const segment = this.segments.find((segment) => {
       return segment.guid === customEvent.detail.id;
     });
-
-    console.log('segment', segment);
+    if (!segment) {
+      console.warn(
+        `could not find segment with guid '${customEvent.detail.id}'`,
+      );
+      return;
+    }
 
     const segmentEditor = new TempletteSegmentEditor();
+    segmentEditor.addEventListener(
+      'update-segment',
+      this.updateSegment(segment),
+    );
+    segmentEditor.loadSegment(segment);
+
     this.shadow.append(segmentEditor);
 
     requestAnimationFrame(() => {
       segmentEditor.classList.add('open');
     });
+  }
+
+  public updateSegment(segment: TempletteSegment): (ev: Event) => void {
+    return (ev: Event) => {
+      const customEvent = <CustomEvent<UpdateSegment>>ev;
+      const rule = customEvent.detail.rule;
+      segment.setSegment(rule);
+    };
   }
 
   public addListeners(): void {

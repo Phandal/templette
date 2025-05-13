@@ -47,7 +47,7 @@ class TempletteBuilder extends HTMLElement {
 
   public getName(): string {
     const DefaultName = 'Custom_Template';
-    return this.documentOptions.name.getValue() || DefaultName;
+    return <string>this.documentOptions.name.getValue() || DefaultName;
   }
 
   public build(): Record<string, unknown> {
