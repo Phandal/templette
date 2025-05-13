@@ -59,9 +59,9 @@ class TempletteSegmentList extends HTMLElement {
     );
     this.list = <HTMLUListElement>node.querySelector('ul');
 
-    this.addSegment = this.addSegment.bind(this);
-    this.removeSegment = this.removeSegment.bind(this);
-    this.editSegment = this.editSegment.bind(this);
+    this.addSegmentListener = this.addSegmentListener.bind(this);
+    this.removeSegmentListener = this.removeSegmentListener.bind(this);
+    this.editSegmentListener = this.editSegmentListener.bind(this);
 
     this.shadow = this.attachShadow({ mode: 'open' });
     this.shadow.adoptedStyleSheets = [globalStyle, localStyle];
@@ -74,17 +74,27 @@ class TempletteSegmentList extends HTMLElement {
     });
   }
 
-  public addSegment(_ev: Event): void {
+  public addSegment(rule?: SegmentRule): void {
     const segmentComponent = new TempletteSegment();
 
-    segmentComponent.addEventListener('remove-segment', this.removeSegment);
-    segmentComponent.addEventListener('edit-segment', this.editSegment);
-
+    segmentComponent.addEventListener(
+      'remove-segment',
+      this.removeSegmentListener,
+    );
+    segmentComponent.addEventListener('edit-segment', this.editSegmentListener);
     this.segments.push(segmentComponent);
-    this.list?.append(segmentComponent);
+    this.list.append(segmentComponent);
+
+    if (rule) {
+      segmentComponent.setSegment(rule);
+    }
   }
 
-  public removeSegment(ev: Event): void {
+  public addSegmentListener(_ev: Event): void {
+    this.addSegment();
+  }
+
+  public removeSegmentListener(ev: Event): void {
     const customEvent = <CustomEvent<RemoveSegment>>ev;
 
     this.segments = this.segments.filter((segment) => {
@@ -92,7 +102,7 @@ class TempletteSegmentList extends HTMLElement {
     });
   }
 
-  public editSegment(ev: Event): void {
+  public editSegmentListener(ev: Event): void {
     const customEvent = <CustomEvent<EditSegment>>ev;
 
     const segment = this.segments.find((segment) => {
@@ -113,7 +123,6 @@ class TempletteSegmentList extends HTMLElement {
     segmentEditor.loadSegment(segment);
 
     this.shadow.append(segmentEditor);
-
     requestAnimationFrame(() => {
       segmentEditor.classList.add('open');
     });
@@ -128,11 +137,11 @@ class TempletteSegmentList extends HTMLElement {
   }
 
   public addListeners(): void {
-    this.addButton.addEventListener('click', this.addSegment);
+    this.addButton.addEventListener('click', this.addSegmentListener);
   }
 
   public removeListeners(): void {
-    this.addButton.removeEventListener('click', this.addSegment);
+    this.addButton.removeEventListener('click', this.addSegmentListener);
   }
 
   public connectedCallback(): void {

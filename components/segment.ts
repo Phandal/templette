@@ -41,7 +41,7 @@ class TempletteSegment extends HTMLElement {
   public name = '';
   public container = false;
   public elements: TempletteElement[] = [];
-  public descendants: TempletteSegment[] = [];
+  public descendants: SegmentRule[] = [];
   public filter?: Filter;
   public repetition?: Repetition;
   public ignore?: string;
@@ -56,6 +56,7 @@ class TempletteSegment extends HTMLElement {
 
   constructor() {
     super();
+    this.name = 'New Segment';
 
     const node = document.importNode(template.content, true);
 
@@ -80,10 +81,6 @@ class TempletteSegment extends HTMLElement {
   }
 
   public getSegment(): SegmentRule {
-    const children = this.descendants.map((child) => {
-      return child.getSegment();
-    });
-
     const elements = this.elements.map((element) => {
       return element.getElement();
     });
@@ -91,24 +88,24 @@ class TempletteSegment extends HTMLElement {
     if (this.container) {
       return {
         name: this.name,
-        children,
         container: true,
         filter: this.filter,
         repetition: this.repetition,
         ignore: this.ignore,
+        children: this.descendants,
       };
     }
 
     return {
       name: this.name,
-      elements,
-      children,
       container: false,
       filter: this.filter,
       repetition: this.repetition,
       ignore: this.ignore,
       trim: this.trim,
       closeRule: undefined, // TODO
+      elements,
+      children: this.descendants,
     };
   }
 
@@ -118,6 +115,7 @@ class TempletteSegment extends HTMLElement {
     this.filter = rule.filter;
     this.repetition = rule.repetition;
     this.ignore = rule.ignore;
+    this.descendants = rule.children;
 
     if (rule.container) {
       this.container = true;
@@ -131,7 +129,6 @@ class TempletteSegment extends HTMLElement {
   }
 
   public removeSegment(): void {
-    console.log('removing this segment');
     this.dispatchEvent(
       new CustomEvent<RemoveSegment>('remove-segment', {
         detail: { id: this.guid },
@@ -141,7 +138,6 @@ class TempletteSegment extends HTMLElement {
   }
 
   public editSegment(): void {
-    console.log('editing this segment');
     this.dispatchEvent(
       new CustomEvent<EditSegment>('edit-segment', {
         detail: { id: this.guid },
@@ -167,7 +163,6 @@ class TempletteSegment extends HTMLElement {
 
   public connectedCallback(): void {
     this.guid = crypto.randomUUID();
-    this.name = 'New Segment';
 
     this.addListeners();
     this.update();

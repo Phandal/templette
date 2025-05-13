@@ -1,5 +1,6 @@
 import globalStyle from '../styles/global.js';
 import type TempletteInput from './input.js';
+import type TempletteSegmentList from './segment-list.js';
 import type TempletteSegment from './segment.js';
 
 // Template
@@ -50,6 +51,7 @@ class TempletteSegmentEditor extends HTMLElement {
   public containerInput: TempletteInput;
   public ignoreInput: TempletteInput;
   public trimInput: TempletteInput;
+  public childrenList: TempletteSegmentList;
 
   private shadow: ShadowRoot;
   public closeButton: HTMLButtonElement;
@@ -73,6 +75,9 @@ class TempletteSegmentEditor extends HTMLElement {
     this.trimInput = <TempletteInput>(
       node.querySelector('templette-input[name="Trim"]')
     );
+    this.childrenList = <TempletteSegmentList>(
+      node.querySelector('templette-segment-list')
+    );
     this.closeButton = <HTMLButtonElement>node.querySelector('button.close');
     this.saveButton = <HTMLButtonElement>node.querySelector('button.save');
 
@@ -90,6 +95,10 @@ class TempletteSegmentEditor extends HTMLElement {
     this.containerInput.setValue(rule.container);
     this.ignoreInput.setValue(rule.ignore);
 
+    for (const child of rule.children) {
+      this.childrenList.addSegment(child);
+    }
+
     if (rule.container) {
       // TODO set container specific fields
     } else {
@@ -98,23 +107,25 @@ class TempletteSegmentEditor extends HTMLElement {
   }
 
   public getSegment(): SegmentRule {
+    const children = this.childrenList.getRules();
+
     if (this.containerInput.getValue()) {
       return {
         name: <string>this.nameInput.getValue(),
-        children: [],
         container: true,
         ignore: <string>this.ignoreInput.getValue(),
+        children,
       };
     }
 
     return {
       name: <string>this.nameInput.getValue(),
-      elements: [],
-      children: [],
-      container: <boolean>this.nameInput.getValue(),
+      container: false,
       ignore: <string>this.ignoreInput.getValue(),
       trim: <boolean>this.trimInput.getValue(),
       closeRule: undefined, // TODO
+      elements: [],
+      children,
     };
   }
 
