@@ -1,4 +1,5 @@
 import globalStyle from '../styles/global.js';
+import type TempletteElement from './element.js';
 
 // Template
 const template = document.createElement('template');
@@ -6,7 +7,7 @@ const template = document.createElement('template');
 template.id = 'templette-element-editor-template';
 template.innerHTML = /* html */ `
   <p>element options go here</p>
-  <button class="close">X</button>
+  <button class="close">Cancel</button>
 `;
 
 // Style
@@ -47,6 +48,10 @@ class TempletteElementEditor extends HTMLElement {
 
     this.shadow.adoptedStyleSheets = [globalStyle, localStyle];
     this.shadow.append(node);
+  }
+
+  public loadElement(_element: TempletteElement): void {
+    //TODO
   }
 
   public close(): void {

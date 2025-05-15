@@ -28,7 +28,7 @@ localStyle.replaceSync(/* css */ `
     display: grid;
     grid-template-rows: auto 1fr auto;
     gap: 10px;
-    height: 100vh;
+    height: calc(100vh - (10px * 2));
     background-color: var(--clr-white);
   }
   div.app {

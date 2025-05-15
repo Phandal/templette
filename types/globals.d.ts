@@ -11,6 +11,18 @@ declare global {
     rule: SegmentRule;
   };
 
+  type RemoveElement = {
+    id: string;
+  };
+
+  type EditElement = {
+    id: string;
+  };
+
+  type UpdateElement = {
+    rule: ElementRule;
+  };
+
   type DocumentOptions = {
     name: string;
     version: string;

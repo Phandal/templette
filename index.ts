@@ -34,6 +34,7 @@ import './components/input.js';
 import './components/document-options.js';
 import './components/element.js';
 import './components/segment.js';
+import './components/element-list.js';
 import './components/segment-list.js';
 import './components/builder.js';
 
