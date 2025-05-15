@@ -18,7 +18,7 @@ template.innerHTML = /* html */ `
     <templette-segment-list></templette-segment-list>
   </div>
   <div style="height: 20%;">
-    <!-- TODO<templette-element-list></templette-element-list> -->
+    <templette-element-list></templette-element-list>
   </div>
   <!-- TODO<templette-closerule></templette-closerule> -->
   <button class="close">Cancel</button>
