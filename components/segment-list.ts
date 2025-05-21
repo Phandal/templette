@@ -74,14 +74,20 @@ class TempletteSegmentList extends HTMLElement {
     });
   }
 
+  public setRules(rules: SegmentRule[]) {
+    for (const rule of rules) {
+      this.addSegment(rule);
+    }
+  }
+
   public addSegment(rule?: SegmentRule): void {
     const segmentComponent = new TempletteSegment();
 
+    segmentComponent.addEventListener('edit-segment', this.editSegmentListener);
     segmentComponent.addEventListener(
       'remove-segment',
       this.removeSegmentListener,
     );
-    segmentComponent.addEventListener('edit-segment', this.editSegmentListener);
     this.segments.push(segmentComponent);
     this.list.append(segmentComponent);
 

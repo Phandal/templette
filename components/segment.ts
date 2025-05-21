@@ -1,5 +1,4 @@
 import globalStyle from '../styles/global.js';
-import type TempletteElement from './element.js';
 
 // Template
 const template = document.createElement('template');
@@ -7,14 +6,14 @@ template.id = 'templette-segment-template';
 template.innerHTML = /* html */ `
 <li class="segment-content">
   <p class="segment-name"></p>
-    <div class="segment-counts">
-      <p class="element-count"></p>
-      <p class="children-count"></p>
-    </div>
-    <div class="segment-actions">
-      <button class="edit">Edit</button>
-      <button class="remove">Remove</button>
-    </div>
+  <div class="segment-counts">
+    <p class="element-count"></p>
+    <p class="children-count"></p>
+  </div>
+  <div class="segment-actions">
+    <button class="edit">Edit</button>
+    <button class="remove">Remove</button>
+  </div>
 </li>
 `;
 
@@ -40,7 +39,7 @@ class TempletteSegment extends HTMLElement {
   public guid = '';
   public name = '';
   public container = false;
-  public elements: TempletteElement[] = [];
+  public elements: ElementRule[] = [];
   public descendants: SegmentRule[] = [];
   public filter?: Filter;
   public repetition?: Repetition;
@@ -72,8 +71,8 @@ class TempletteSegment extends HTMLElement {
     this.editButton = <HTMLButtonElement>node.querySelector('button.edit');
     this.removeButton = <HTMLButtonElement>node.querySelector('button.remove');
 
-    this.removeSegment = this.removeSegment.bind(this);
     this.editSegment = this.editSegment.bind(this);
+    this.removeSegment = this.removeSegment.bind(this);
 
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.adoptedStyleSheets = [globalStyle, localStyle];
@@ -81,10 +80,6 @@ class TempletteSegment extends HTMLElement {
   }
 
   public getSegment(): SegmentRule {
-    const elements = this.elements.map((element) => {
-      return element.getElement();
-    });
-
     if (this.container) {
       return {
         name: this.name,
@@ -104,13 +99,12 @@ class TempletteSegment extends HTMLElement {
       ignore: this.ignore,
       trim: this.trim,
       closeRule: undefined, // TODO
-      elements,
+      elements: this.elements,
       children: this.descendants,
     };
   }
 
   public setSegment(rule: SegmentRule) {
-    // TODO set children and elements recursively
     this.name = rule.name;
     this.filter = rule.filter;
     this.repetition = rule.repetition;
@@ -122,10 +116,19 @@ class TempletteSegment extends HTMLElement {
     } else {
       this.container = false;
       this.trim = rule.trim;
+      this.elements = rule.elements;
       this.closeRule = rule.closeRule;
     }
 
     this.update();
+  }
+
+  public editSegment(): void {
+    this.dispatchEvent(
+      new CustomEvent<EditSegment>('edit-segment', {
+        detail: { id: this.guid },
+      }),
+    );
   }
 
   public removeSegment(): void {
@@ -137,14 +140,6 @@ class TempletteSegment extends HTMLElement {
     this.remove();
   }
 
-  public editSegment(): void {
-    this.dispatchEvent(
-      new CustomEvent<EditSegment>('edit-segment', {
-        detail: { id: this.guid },
-      }),
-    );
-  }
-
   public update(): void {
     this.segmentNameParagragh.textContent = this.name;
     this.elementCountParagraph.textContent = `${this.elements.length.toString()} Elements`;
@@ -152,13 +147,13 @@ class TempletteSegment extends HTMLElement {
   }
 
   public addListeners(): void {
-    this.removeButton.addEventListener('click', this.removeSegment);
     this.editButton.addEventListener('click', this.editSegment);
+    this.removeButton.addEventListener('click', this.removeSegment);
   }
 
   public removeListeners(): void {
-    this.removeButton.removeEventListener('click', this.removeSegment);
     this.editButton.removeEventListener('click', this.editSegment);
+    this.removeButton.removeEventListener('click', this.removeSegment);
   }
 
   public connectedCallback(): void {

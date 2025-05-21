@@ -67,22 +67,26 @@ class TempletteElementList extends HTMLElement {
     this.shadow.append(node);
   }
 
+  public getRules(): ElementRule[] {
+    return this.elements.map((element) => {
+      return element.getElement();
+    });
+  }
+
   public addElement(rule?: ElementRule): void {
     const elementComponent = new TempletteElement();
 
     elementComponent.addEventListener('edit-element', this.editElementListener);
+    elementComponent.addEventListener(
+      'remove-element',
+      this.removeElementListener,
+    );
     this.elements.push(elementComponent);
     this.list.append(elementComponent);
 
     if (rule) {
       elementComponent.setElement(rule);
     }
-  }
-
-  public getRules(): ElementRule[] {
-    return this.elements.map((element) => {
-      return element.getElement();
-    });
   }
 
   public addElementListener(_ev: Event): void {

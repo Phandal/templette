@@ -1,5 +1,6 @@
 import globalStyle from '../styles/global.js';
 import type TempletteInput from './input.js';
+import type TempletteElementList from './element-list.js';
 import type TempletteSegmentList from './segment-list.js';
 import type TempletteSegment from './segment.js';
 
@@ -12,8 +13,8 @@ template.innerHTML = /* html */ `
   <templette-input name="Container" type="checkbox"></templette-input>
   <templette-input name="Trim" type="checkbox"></templette-input>
   <templette-input name="Ignore" type="text"></templette-input>
-  <!-- TODO<templette-repetition></templette-repetition> -->
-  <!-- TODO<templette-filter></templette-filter> -->
+  <templette-repetition></templette-repetition>
+  <templette-filter></templette-filter>
   <div style="height: 20%;">
     <templette-segment-list></templette-segment-list>
   </div>
@@ -51,6 +52,7 @@ class TempletteSegmentEditor extends HTMLElement {
   public containerInput: TempletteInput;
   public ignoreInput: TempletteInput;
   public trimInput: TempletteInput;
+  public elementList: TempletteElementList;
   public childrenList: TempletteSegmentList;
 
   private shadow: ShadowRoot;
@@ -74,6 +76,9 @@ class TempletteSegmentEditor extends HTMLElement {
     );
     this.trimInput = <TempletteInput>(
       node.querySelector('templette-input[name="Trim"]')
+    );
+    this.elementList = <TempletteElementList>(
+      node.querySelector('templette-element-list')
     );
     this.childrenList = <TempletteSegmentList>(
       node.querySelector('templette-segment-list')
@@ -102,12 +107,16 @@ class TempletteSegmentEditor extends HTMLElement {
     if (rule.container) {
       // TODO set container specific fields
     } else {
+      for (const element of rule.elements) {
+        this.elementList.addElement(element);
+      }
       this.trimInput.setValue(rule.trim);
     }
   }
 
   public getSegment(): SegmentRule {
     const children = this.childrenList.getRules();
+    const elements = this.elementList.getRules();
 
     if (this.containerInput.getValue()) {
       return {
@@ -124,7 +133,7 @@ class TempletteSegmentEditor extends HTMLElement {
       ignore: <string>this.ignoreInput.getValue(),
       trim: <boolean>this.trimInput.getValue(),
       closeRule: undefined, // TODO
-      elements: [],
+      elements,
       children,
     };
   }

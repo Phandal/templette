@@ -121,6 +121,7 @@ class TempletteApp extends HTMLElement {
   private parseTemplate(templ: Template): void {
     this.io.clearOutput();
     this.builder.documentOptions.setOptions(templ);
+    this.builder.segmentList.setRules(templ.rules);
   }
 
   /**

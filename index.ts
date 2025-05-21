@@ -26,6 +26,8 @@ import './components/menu-bar.js';
 import './components/header.js';
 
 // Sidecards
+import './components/filter.js';
+import './components/repetition.js';
 import './components/segment-editor.js';
 import './components/element-editor.js';
 
